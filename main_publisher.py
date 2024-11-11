@@ -1,6 +1,7 @@
 import socket
 import json
 import paho.mqtt.client as mqtt
+import struct
 
 class MainPublisher(): 
 
@@ -55,15 +56,18 @@ class MainPublisher():
 
 
     def publish_velocity_message(self, data):
-        #msg = int(data)
+        print("IMPORTANT")
+        msg = struct.pack('ff', float(data[0]), float(data[1]))
+        self.client.publish(self.topic_publish_enginee, msg) 
         print('Sending move engine data: "%s"' % data)
-       # self.client.publish(self.topic_publish_enginee, data) 
+
 
 
     def publish_turn_message(self, angle_degree):
-        msg = float(angle_degree)
+        msg = struct.pack('f', float(angle_degree))
+        self.client.publish(self.topic_publish_servo, msg)
         print('Sending turn engine data: "%s"' % msg)
-        self.client.publish(self.topic_publish_servo, str(msg))
+
 
 
     def parse_degree(self, json_data):

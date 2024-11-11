@@ -1,5 +1,7 @@
 import paho.mqtt.client as mqtt
 from serwo import Servo
+import struct
+
 
 class ServoSubscriber():
     
@@ -12,9 +14,9 @@ class ServoSubscriber():
         self.servo = Servo()
         print("Init successful")
 
-    
-    def listener_callback(self, msg):
-        angle = int(msg.payload.decode())
+        
+    def listener_callback(self, client, userdata, msg):
+        angle = struct.unpack('i', msg.payload)[0]
         self.servo.move(angle)
         print(f"Received: {angle}") 
 

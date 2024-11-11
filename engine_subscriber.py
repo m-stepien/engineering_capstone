@@ -1,6 +1,6 @@
-from motor import MotorMock
+from motor import Motor
 import paho.mqtt.client as mqtt
-
+import struct
 
 class EngineSubscriber():
     
@@ -10,15 +10,21 @@ class EngineSubscriber():
         self.topic = topic
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
-        self.motor = MotorMock()
-        self.motor_controler = MotorMock()
+        self.motor = Motor()
         print("Init successful")
 
     
-    def listener_callback(self, msg):
-        velocity = int(msg.payload.decode())
-        self.motor.move_forward(velocity)
-        print(f'Received: {velocity}')
+    def listener_callback(self, client, userdata, msg):
+        print("Important")
+
+        unpacked_data = struct.unpack('i?', msg.payload)
+        v = unpacked_data[0]
+        d = unpacked_data[1]
+        if d:
+            self.motor.move_forward(v)
+        else:
+            self.motor.move_backward(v)    
+        print(f'Received: {v}')
 
     
     def start(self):
