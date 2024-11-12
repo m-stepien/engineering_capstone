@@ -18,21 +18,17 @@ class ServoSubscriber():
     def listener_callback(self, client, userdata, msg):
         angle = struct.unpack('i', msg.payload)[0]
         self.servo.move(angle)
+        print("ServoSubscrivber")
         print(f"Received: {angle}") 
 
     def start(self):
         print(f"Subscribing to topic: {self.topic}")
-        self.client.loop_start()   
+        self.client.loop_forever()   
 
 def main(args=None):
     servo_subscriber = ServoSubscriber()
     servo_subscriber.start()
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        print("Shutting down.")
-        servo_subscriber.client.loop_stop()
+    servo_subscriber.client.loop_stop()
 
 if __name__ == '__main__':
     main()
