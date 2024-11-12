@@ -1,26 +1,3 @@
-# FROM debian:latest
-
-# RUN apt-get update && \
-#     apt-get install -y \
-#     mosquitto \
-#     python3 \
-#     python3-pip \
-#     python3-dev \
-#     build-essential \
-#     && apt-get clean
-
-# RUN python3 -m pip install --upgrade pip
-
-# RUN pip3 install paho-mqtt
-
-# COPY ./src /app/src
-
-# WORKDIR /app/src
-
-# EXPOSE 12345
-
-# CMD mosquitto -d && python3 /app/src/scripts/run.py
-
 FROM python:3.9-slim
 
 # Install mosquitto (MQTT broker)

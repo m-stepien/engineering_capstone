@@ -14,7 +14,7 @@ class EngineDataHandler():
 
     def start(self):
         print(f"Subscribing to topic: {self.topic}")
-        self.client.loop_start() 
+        self.client.loop_forever()
 
     def send_speed(self, v):
         speed_msg = UInt8()
@@ -31,12 +31,7 @@ class EngineDataHandler():
 def main(args=None):
     engine_data_handler = EngineDataHandler()
     engine_data_handler.start()
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        print("Shutting down.")
-        engine_data_handler.client.loop_stop()
+    engine_data_handler.client.loop_stop()
 
 if __name__ == '__main__':
     main()

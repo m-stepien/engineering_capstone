@@ -80,12 +80,7 @@ class MainPublisher():
 def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.start_socket()
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        print("Shutting down.")
-        main_publisher.client.loop_stop()
+    main_publisher.client.loop_stop()
 
 if __name__ == '__main__':
     main()

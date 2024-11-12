@@ -22,19 +22,14 @@ class EngineSubscriber():
     
     def start(self):
         print(f"Subscribing to topic: {self.topic}")
-        self.client.loop_start()   
+        self.client.loop_forever()  
 
 
 
 def main(args=None):
     enginee_subscriber = EngineSubscriber()
     enginee_subscriber.start()
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        print("Shutting down.")
-        enginee_subscriber.client.loop_stop()
+    enginee_subscriber.client.loop_stop()
 
 if __name__ == '__main__':
     main()

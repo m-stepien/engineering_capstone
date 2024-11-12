@@ -20,17 +20,12 @@ class ServoSubscriber():
 
     def start(self):
         print(f"Subscribing to topic: {self.topic}")
-        self.client.loop_start()   
+        self.client.loop_forever()
 
 def main(args=None):
     servo_subscriber = ServoSubscriber()
     servo_subscriber.start()
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        print("Shutting down.")
-        servo_subscriber.client.loop_stop()
+
 
 if __name__ == '__main__':
     main()

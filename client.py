@@ -9,7 +9,7 @@ print(f"Connected to server at {server_address}")
 
 try:
     while True:
-        command = input("Enter command to send to the server (type 'disconnect' to disconnect): ")
+        command = input("Enter command to send to the server")
         
         client_socket.send(command.encode('utf-8'))
         print(f"Sent command: {command}")
