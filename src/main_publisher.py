@@ -1,8 +1,9 @@
 import socket
 import json
 import threading
-
+import struct
 import paho.mqtt.client as mqtt
+
 
 class MainPublisher(): 
 
@@ -28,16 +29,18 @@ class MainPublisher():
                     print(f"Received command: {json_data}")
                     angle = self.parse_degree(json_data)
                     self.publish_turn_message(angle)
-                    client_socket.send("ok".encode('utf-8'))
-                    enginee_data = self.parse_velocity(json_data)
+                    self.client_socket.send("ok".encode('utf-8'))
+                    enginee_data = self.parse_velocity(json_data)   
                     self.publish_velocity_message(enginee_data)
                 else:
                     print("Client disconnected unexpectedly.")
                     client_socket.close()
+                    self.client_socket = None
                     break
         except Exception as e:
             print(f"Error receiving command: {e}")
-            client_socket.close()
+            self.client_socket.close()
+           
 
     def accept_connection(self):
         while True:
@@ -46,6 +49,7 @@ class MainPublisher():
             self.client_socket = client_socket
             client_thread = threading.Thread(target=self.start_socket, args=(client_socket,))
             client_thread.start()
+
     
 
     def destroy_node(self):
@@ -54,16 +58,19 @@ class MainPublisher():
         self.server_socket.close()
         super().destroy_node()
 
+
     def publish_velocity_message(self, data):
-        msg = json.dumps(data)
-        print('Sending move engine data:', msg)
-        self.client.publish(self.topic_publish_enginee, msg)
+        print("IMPORTANT")
+        msg = struct.pack('ff', float(data[0]), float(data[1]))
+        self.client.publish(self.topic_publish_enginee, msg) 
+        print('Sending move engine data: "%s"' % data)
 
-
+    
     def publish_turn_message(self, angle_degree):
-        msg = float(angle_degree)
+        msg = struct.pack('f', float(angle_degree))
+        self.client.publish(self.topic_publish_servo, msg)
         print('Sending turn engine data: "%s"' % msg)
-        self.client.publish(self.topic_publish_servo, str(msg))
+
 
 
     def parse_degree(self, json_data):
@@ -81,6 +88,11 @@ def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
     main_publisher.start_socket()
+
+# def main(args=None):
+#     main_publisher = MainPublisher()
+#     main_publisher.start_socket()
+#     main_publisher.client.loop_stop()
 
 if __name__ == '__main__':
     main()
