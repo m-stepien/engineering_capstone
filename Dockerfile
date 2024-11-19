@@ -7,6 +7,7 @@ RUN apt-get update && \
 
 # Install the Python MQTT client library (paho-mqtt)
 RUN pip3 install paho-mqtt==1.6.1
+RUN pip3 install pycryptodome==3.21.0
 
 # Copy all Python scripts from the local ./src directory to /app/src in the container
 COPY ./src /app/src

@@ -1,6 +1,17 @@
 import socket
 import json
 import paho.mqtt.client as mqtt
+from Crypto.Protocol.KDF import PBKDF2
+
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+
+salt = b'\xda\x02\xd9A\xcd\x19\xd9U]x\xe10\xc1\xb5\x92\xbd\x0e\x8eA\x89\xafM\xf9KDf\x96\xb0\xfa+E\xb6'
+password = "veryStrongPassword"
+key = PBKDF2(password, salt, dkLen=32)
+iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
+
+cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 class MainPublisher(): 
 
@@ -24,7 +35,10 @@ class MainPublisher():
             while self.client_socket:
                 data = self.client_socket.recv(1024)
                 if data:
-                    json_data = json.loads(data.decode('utf-8'))
+                    print(data)
+                    decrypted_data = unpad(cipher.decrypt(data), AES.block_size)
+                    print(f"Decrypted data: {decrypted_data}")
+                    json_data = json.loads(decrypted_data.decode('utf-8'))
                     print(f"Received command: {json_data}")
                     angle = self.parse_degree(json_data)
                     self.publish_turn_message(angle)
