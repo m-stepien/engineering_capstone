@@ -51,7 +51,7 @@ def generate_mock_frames():
 
 @app.route('/video')
 def video():
-    return Response(generate_frames(),
+    return Response(generate_mock_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
