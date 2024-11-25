@@ -1,7 +1,8 @@
 FROM python:3.9-slim
 
 RUN apt-get update && \
-    apt-get install -y mosquitto && \
+    apt-get install -y \
+        mosquitto \
         build-essential \
         cmake \
         pkg-config \
@@ -21,6 +22,7 @@ RUN apt-get update && \
     apt-get clean
 
 RUN pip3 install paho-mqtt==1.6.1
+RUN pip3 install --no-cache-dir flask opencv-python-headless
 
 COPY ./src /app/src
 

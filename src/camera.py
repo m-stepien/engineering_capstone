@@ -2,6 +2,7 @@ import cv2
 from flask import Flask, Response
 import os
 import glob
+import time
 
 app = Flask(__name__)
 
@@ -46,7 +47,7 @@ def generate_mock_frames():
             frame_bytes = jpeg.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
-
+            time.sleep(0.2)
 
 
 @app.route('/video')
