@@ -60,7 +60,6 @@ class MainPublisher():
 
 
     def publish_velocity_message(self, data):
-        print("IMPORTANT")
         msg = struct.pack('ff', float(data[0]), float(data[1]))
         self.client.publish(self.topic_publish_enginee, msg) 
         print('Sending move engine data: "%s"' % data)
@@ -89,10 +88,6 @@ def main(args=None):
     main_publisher.client.loop_start()
     main_publisher.start_socket()
 
-# def main(args=None):
-#     main_publisher = MainPublisher()
-#     main_publisher.start_socket()
-#     main_publisher.client.loop_stop()
 
 if __name__ == '__main__':
     main()
