@@ -1,6 +1,6 @@
 import socket
 
-server_address = ('localhost', 12345) 
+server_address = ('inz.local', 12345) 
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -15,7 +15,7 @@ try:
         print(f"Sent command: {command}")
 
         if command.lower() == 'disconnect':
-            break  # Exit the loop to close the connection
+            break
 
         response = client_socket.recv(1024).decode('utf-8')
         print(f"Received response: {response}")
