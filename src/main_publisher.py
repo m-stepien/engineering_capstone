@@ -1,7 +1,9 @@
 import socket
 import json
-import paho.mqtt.client as mqtt
+import threading
 import struct
+import paho.mqtt.client as mqtt
+
 
 class MainPublisher(): 
 
@@ -18,12 +20,10 @@ class MainPublisher():
         print("init succesfull")
         self.accept_connection()
 
-
-
-    def start_socket(self):
+    def start_socket(self, client_socket):
         try:
-            while self.client_socket:
-                data = self.client_socket.recv(1024)
+            while client_socket:
+                data = client_socket.recv(1024)
                 if data:
                     json_data = json.loads(data.decode('utf-8'))
                     print(f"Received command: {json_data}")
@@ -34,18 +34,22 @@ class MainPublisher():
                     self.publish_velocity_message(enginee_data)
                 else:
                     print("Client disconnected unexpectedly.")
-                    self.client_socket.close()
+                    client_socket.close()
                     self.client_socket = None
+                    break
         except Exception as e:
             print(f"Error receiving command: {e}")
-            if self.client_socket:
-                self.client_socket.close()
-                self.client_socket = None
-
+            self.client_socket.close()
+           
 
     def accept_connection(self):
-        self.client_socket, addr = self.server_socket.accept()
-        print(f"Connection established with {addr}")
+        while True:
+            client_socket, addr = self.server_socket.accept()
+            print(f"Connection established with {addr}")
+            self.client_socket = client_socket
+            client_thread = threading.Thread(target=self.start_socket, args=(client_socket,))
+            client_thread.start()
+
     
 
     def destroy_node(self):
@@ -61,8 +65,7 @@ class MainPublisher():
         self.client.publish(self.topic_publish_enginee, msg) 
         print('Sending move engine data: "%s"' % data)
 
-
-
+    
     def publish_turn_message(self, angle_degree):
         msg = struct.pack('f', float(angle_degree))
         self.client.publish(self.topic_publish_servo, msg)
@@ -83,8 +86,13 @@ class MainPublisher():
 
 def main(args=None):
     main_publisher = MainPublisher()
+    main_publisher.client.loop_start()
     main_publisher.start_socket()
-    main_publisher.client.loop_stop()
+
+# def main(args=None):
+#     main_publisher = MainPublisher()
+#     main_publisher.start_socket()
+#     main_publisher.client.loop_stop()
 
 if __name__ == '__main__':
     main()

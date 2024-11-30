@@ -15,8 +15,6 @@ class EngineSubscriber():
 
     
     def listener_callback(self, client, userdata, msg):
-        print("Important")
-
         unpacked_data = struct.unpack('i?', msg.payload)
         v = unpacked_data[0]
         d = unpacked_data[1]
