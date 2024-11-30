@@ -22,7 +22,7 @@ try:
                 continue
             encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
             data = pickle.dumps(buffer)
-            server_socket.sendto(data, ('192.168.0.154', port))
+            server_socket.sendto(data, ('192.168.8.255', port))
 
 except Exception as e:
     print(f"Error: {e}")
