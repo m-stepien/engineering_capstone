@@ -54,8 +54,7 @@ class MainPublisher():
                     break
         except Exception as e:
             print(f"Error receiving command: {e}")
-            self.client_socket.close()
-           
+            self.client_socket.send("Something is wrong check the command".encode('utf-8'))
 
     def accept_connection(self):
         while True:
@@ -84,7 +83,7 @@ class MainPublisher():
     def publish_turn_message(self, angle_degree):
         msg = struct.pack('f', float(angle_degree))
         self.client.publish(self.topic_publish_servo, msg)
-        print('Sending turn engine data: "%s"' % msg)
+        print('Sending turn engine data: "%s"' % angle_degree)
 
 
 
