@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Video Stream</title>
+    <script src="https://unpkg.com/simple-peer@9.10.0/simple-peer.min.js"></script>
+</head>
+<body>
+    <video id="video" autoplay></video>
+
+    <script>
+        // Initialize WebRTC Peer object
+        const peer = new SimplePeer({
+            initiator: location.hash === '#init', // Decide who is the initiator (based on URL hash)
+            trickle: false, // Disable trickle ICE candidates
+        });
+
+        // Handle the 'open' event (connection is established)
+        peer.on('open', id => {
+            console.log("Connected with ID: ", id);
+            // You can send the peer id to the signaling server here
+        });
+
+        // Handle incoming 'call' events (this is for receiving the call)
+        peer.on('call', call => {
+            console.log('Receiving a call');
+            call.answer();  // Answer the call
+            call.on('stream', stream => {
+                const videoElement = document.getElementById('video');
+                videoElement.srcObject = stream;
+            });
+        });
+
+        // Handle incoming stream from other peer
+        peer.on('stream', stream => {
+            console.log('Received stream', stream);
+            const videoElement = document.getElementById('video');
+            videoElement.srcObject = stream; // Display the received video stream
+        });
+
+        // Start the video stream
+        async function start() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const videoElement = document.getElementById('video');
+                videoElement.srcObject = stream; // Display your local stream
+
+                // If you're the initiator, make a call to the peer
+                if (peer.initiator) {
+                    peer.signal('peer-id');  // Signal to the remote peer (send offer)
+                }
+
+                // Make a call to the remote peer
+                peer.call('peer-id', stream); // 'peer-id' should be replaced with actual peer ID
+            } catch (err) {
+                console.error('Error accessing media devices:', err);
+            }
+        }
+
+        start(); // Start the stream
+    </script>
+</body>
+</html>

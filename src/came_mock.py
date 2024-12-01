@@ -4,6 +4,7 @@ import pickle
 import struct
 import os
 import glob
+import time
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 host_ip = '0.0.0.0'  
@@ -22,7 +23,8 @@ try:
                 continue
             encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
             data = pickle.dumps(buffer)
-            server_socket.sendto(data, ('192.168.8.255', port))
+            
+            server_socket.sendto(buffer.tobytes(), ('192.168.0.124', port))
 
 except Exception as e:
     print(f"Error: {e}")
