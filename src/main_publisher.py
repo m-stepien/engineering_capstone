@@ -9,16 +9,25 @@ class MainPublisher():
 
     def __init__(self, broker_address="localhost"):
         self.client = mqtt.Client("MainPublisher")
-        self.client.connect(broker_address)
+
+        try:
+            self.client.connect(broker_address)
+        except Exception as e:
+            print(f"Issue with connection to broker: {e}")
+
         self.topic_publish_enginee = 'controller_enginee_data'
         self.topic_publish_servo = 'controller_turn_data'
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server_socket.bind(('0.0.0.0', 12345))
-        self.server_socket.listen(1)
-        self.client_socket = None
-        print("init succesfull")
-        self.accept_connection()
+
+        try:
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            self.server_socket.bind(('0.0.0.0', 12345))
+            self.server_socket.listen(1)
+            self.client_socket = None
+            print("init succesfull")
+            self.accept_connection()
+        except Exception as e:
+            print(f"Issue during server socker creation: {e}")
 
     def start_socket(self, client_socket):
         try:
@@ -27,11 +36,17 @@ class MainPublisher():
                 if data:
                     json_data = json.loads(data.decode('utf-8'))
                     print(f"Received command: {json_data}")
-                    angle = self.parse_degree(json_data)
-                    self.publish_turn_message(angle)
-                    self.client_socket.send("ok".encode('utf-8'))
-                    enginee_data = self.parse_velocity(json_data)   
-                    self.publish_velocity_message(enginee_data)
+                    try:
+                        angle = self.parse_degree(json_data)
+                        self.publish_turn_message(angle)
+                        enginee_data = self.parse_velocity(json_data)
+                        self.publish_velocity_message(enginee_data)
+                        self.client_socket.send("ok".encode('utf-8'))
+                    except Exception as e:
+                        print(f"something wrong with received message: {e}")
+                        self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+
+
                 else:
                     print("Client disconnected unexpectedly.")
                     client_socket.close()
@@ -39,8 +54,7 @@ class MainPublisher():
                     break
         except Exception as e:
             print(f"Error receiving command: {e}")
-            self.client_socket.close()
-           
+            self.client_socket.send("Something is wrong check the command".encode('utf-8'))
 
     def accept_connection(self):
         while True:
@@ -68,7 +82,7 @@ class MainPublisher():
     def publish_turn_message(self, angle_degree):
         msg = struct.pack('f', float(angle_degree))
         self.client.publish(self.topic_publish_servo, msg)
-        print('Sending turn engine data: "%s"' % msg)
+        print('Sending turn engine data: "%s"' % angle_degree)
 
 
 

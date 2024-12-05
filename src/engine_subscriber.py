@@ -6,7 +6,12 @@ class EngineSubscriber():
     
     def __init__(self, broker_address='localhost', topic='enginee_velocity'):
         self.client = mqtt.Client("EngineSubscriber")
-        self.client.connect(broker_address)
+
+        try:
+            self.client.connect(broker_address)
+        except Exception as e:
+            print(f"Problem with connection to broker: {e}")
+
         self.topic = topic
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
@@ -15,7 +20,12 @@ class EngineSubscriber():
 
     
     def listener_callback(self, client, userdata, msg):
-        unpacked_data = struct.unpack('i?', msg.payload)
+        try:
+            unpacked_data = struct.unpack('i?', msg.payload)
+        except Exception as e:
+            print(f"Issue with unpacking struct: {e}")
+            return 0
+
         v = unpacked_data[0]
         d = unpacked_data[1]
         if d:
