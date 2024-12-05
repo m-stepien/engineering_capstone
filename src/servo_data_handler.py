@@ -1,4 +1,6 @@
 import paho.mqtt.client as mqtt
+import struct
+
 
 
 class ServoDataHandler():
@@ -14,20 +16,26 @@ class ServoDataHandler():
 
     
     def angle_map(self, a):
-        mapped = a - 90
+        if a<180:
+            mapped = a - 90
+        elif a<270:
+            mapped = 180 - (a-180)-90
+        else:
+            mapped = -90+360-a
         return int(mapped)
 
 
     def send_angle(self, a):
         a=self.angle_map(a)
-        print(f'Map to: {angle_msg.data}')
-        self.client.publish(self.publish_topic, message)
+        print(f'Map to: {a}')
+        msg=struct.pack('i', int(a))
+        self.client.publish(self.publish_topic, msg)
     
 
-    def listener_callback(self, msg):
-        message = msg.payload.decode()
-        print(f'Received: {message}')
-        self.send_angle(message)
+    def listener_callback(self, client, userdata, msg):
+        angle = struct.unpack('f', msg.payload)[0]
+        print(f'Received: {angle}')
+        self.send_angle(angle)
 
     def start(self):
         print(f"Subscribing to topic: {self.topic}")
@@ -37,7 +45,7 @@ class ServoDataHandler():
 def main(args=None):
     servo_data_handler = ServoDataHandler()
     servo_data_handler.start()
-
+    servo_data_handler.client.loop_stop()
 
 if __name__ == '__main__':
     main()

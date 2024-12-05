@@ -14,7 +14,7 @@ iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 
-server_address = ('localhost', 12345) 
+server_address = ('inz.local', 12345) 
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -31,7 +31,7 @@ try:
         print(f"Sent command: {ciphered_data}")
 
         if command.lower() == 'disconnect':
-            break  # Exit the loop to close the connection
+            break
 
         response = client_socket.recv(1024).decode('utf-8')
         print(f"Received response: {response}")

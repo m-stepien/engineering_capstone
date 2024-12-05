@@ -16,15 +16,17 @@ class Motor():
         self.motor_speed.ChangeDutyCycle(100)
         time.sleep(1/100)
         self.motor_speed.ChangeDutyCycle(speed)
-        time.sleep(1)
-    
+        time.sleep(0.1)
+        self.stop()
+
     def move_backward(self,speed):
         GPIO.output(16, False)
         GPIO.output(18, True)
         self.motor_speed.ChangeDutyCycle(100)
         time.sleep(1/100)
         self.motor_speed.ChangeDutyCycle(speed)
-        time.sleep(1)
+        time.sleep(0.1)
+        self.stop()
 
     def stop(self):
         GPIO.output(16, False)
