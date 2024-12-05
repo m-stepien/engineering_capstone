@@ -31,14 +31,3 @@ finally:
     cap.release()
     cv2.destroyAllWindows()
     server_socket.close()
-
-# import cv2
-
-# # Open the first connected camera (index 0)
-# cap = cv2.VideoCapture(0)
-
-# # Check if the camera opened successfully
-# if not cap.isOpened():
-#     print("Error: Could not open camera.")
-# else:
-#     print("Camera opened successfully!")
