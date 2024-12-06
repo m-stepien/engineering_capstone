@@ -45,8 +45,8 @@ class MainPublisher():
                 try:
                     data = client_socket.recv(1024)
                     if data:
-                        json_data = json.loads(data.decode('utf-8'))
-                        print(f"Received command: {json_data}")
+                        # json_data = json.loads(data.decode('utf-8'))
+                        # print(f"Received command: {json_data}")
 
                         decrypted_data = unpad(cipher.decrypt(data), AES.block_size)
                         print(f"Decrypted data: {decrypted_data}")
