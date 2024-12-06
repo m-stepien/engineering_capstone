@@ -54,7 +54,6 @@ class MainPublisher():
                         print(f"Received command: {json_data}")
                         angle = self.parse_degree(json_data)
                         self.publish_turn_message(angle)
-                        self.client_socket.send("ok".encode('utf-8'))
                         enginee_data = self.parse_velocity(json_data)   
                         self.publish_velocity_message(enginee_data)
                         try:
@@ -126,13 +125,7 @@ def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
     main_publisher.start_socket()
-
-
-if __name__ == '__main__':
-    main()
-    publisher.start_socket()
     main_publisher.client.loop_stop()
-    
 
 if __name__ == '__main__':
     main()
