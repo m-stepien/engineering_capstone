@@ -7,7 +7,11 @@ class ServoSubscriber():
     
     def __init__(self, broker_address="localhost", topic="servo_angle"):
         self.client = mqtt.Client("ServoSubscriber")
-        self.client.connect(broker_address)
+        try:
+            self.client.connect(broker_address)
+        except Exception as e:
+            print(f"Issue with connection to the broker: {e}")
+
         self.topic = topic
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
@@ -16,10 +20,13 @@ class ServoSubscriber():
 
         
     def listener_callback(self, client, userdata, msg):
-        angle = struct.unpack('i', msg.payload)[0]
-        self.servo.move(angle)
-        print("ServoSubscrivber")
-        print(f"Received: {angle}") 
+        try:
+            angle = struct.unpack('i', msg.payload)[0]
+            self.servo.move(angle)
+            print("ServoSubscrivber")
+            print(f"Received: {angle}")
+        except Exception as e:
+            print(f"something wrong with moving servo: {e}")
 
     def start(self):
         print(f"Subscribing to topic: {self.topic}")

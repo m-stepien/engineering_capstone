@@ -1,6 +1,5 @@
 import socket
 from Crypto.Protocol.KDF import PBKDF2
-
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
@@ -15,6 +14,7 @@ cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 #inz.local
 server_address = ('localhost', 12345) 
+
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

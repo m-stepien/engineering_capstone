@@ -1,59 +1,45 @@
 import cv2
-from flask import Flask, Response
-import os
-import glob
+import socket
+import pickle
+import struct
 import time
 
-app = Flask(__name__)
 
 
-def generate_frames():
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("Error: Could not open video device.")
-        exit()
-    
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+host_ip = '0.0.0.0'  
+port = 12346
+server_socket.bind((host_ip, port))
+print(f"Init succesuful")
+
+cap = cv2.VideoCapture(0, cv2.CAP_V4L2)  
+fps = 30
+cap.set(cv2.CAP_PROP_FPS, fps)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320) #640
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240) #480
+cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+frame_duration = 1 / fps 
+
+if not cap.isOpened():
+    print("Error: Camera not initialized!")
+    cap.release()
+    server_socket.close()
+    exit()
+try:
+    last_frame_time = time.perf_counter()
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("Failed to grab frame.")
             break
-
-        ret, jpeg = cv2.imencode('.jpg', frame)
-        if not ret:
-            continue
-
-        frame_bytes = jpeg.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
-
-
-def generate_mock_frames():
-    mock_images_path = "frames/*.jpg"  # Path to your mock images
-    mock_images = [cv2.imread(img_path) for img_path in sorted(glob.glob(mock_images_path))]
-    if not mock_images:
-        print("Error: No mock images found.")
-        exit()
-    while True:
-        for frame in mock_images:
-            if frame is None:
-                print("Failed to load mock frame.")
-                continue
-
-            ret, jpeg = cv2.imencode('.jpg', frame)
-            if not ret:
-                continue
-
-            frame_bytes = jpeg.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
-            time.sleep(0.2)
-
-
-@app.route('/video')
-def video():
-    return Response(generate_mock_frames(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=12346)
+        encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
+        server_socket.sendto(buffer, ('192.168.0.124', port))
+        elapsed_time = time.perf_counter() - last_frame_time
+        if elapsed_time < frame_duration:
+            time.sleep(frame_duration - elapsed_time)
+        last_frame_time = time.perf_counter()
+except Exception as e:
+    print(f"Error: {e}")
+finally:
+    cap.release()
+    cv2.destroyAllWindows()
+    server_socket.close()
