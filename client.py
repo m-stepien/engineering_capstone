@@ -1,6 +1,6 @@
 import socket
 
-server_address = ('localhost', 12345) 
+server_address = ('inz.local', 12345) 
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

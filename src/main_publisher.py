@@ -55,7 +55,6 @@ class MainPublisher():
                         client_socket.close()
                         self.client_socket = None
                         break
-
                 except socket.timeout:
                     print(f"Brak wiadomości wyłączam silniki")
                     self.publish_velocity_message([0, 0])
