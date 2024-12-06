@@ -22,11 +22,9 @@ RUN apt-get update && \
     apt-get clean
 
 RUN pip3 install paho-mqtt==1.6.1
-<<<<<<< HEAD
 RUN pip3 install pycryptodome==3.21.0
-=======
 RUN pip3 install --no-cache-dir flask opencv-python-headless
->>>>>>> docker
+
 
 COPY ./src /app/src
 
