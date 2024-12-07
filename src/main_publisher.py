@@ -1,3 +1,4 @@
+import base64
 import socket
 import json
 import threading
@@ -9,8 +10,8 @@ from Crypto.Util.Padding import pad, unpad
 
 salt = b'\xda\x02\xd9A\xcd\x19\xd9U]x\xe10\xc1\xb5\x92\xbd\x0e\x8eA\x89\xafM\xf9KDf\x96\xb0\xfa+E\xb6'
 password = "veryStrongPassword"
-key = PBKDF2(password, salt, dkLen=32)
-iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
+key = bytes.fromhex("6481218e4a2231a7eee6afa356fd098d386d5a58ff22ef03fe4d8bfea9bb5e48")
+iv = bytes.fromhex("da385e282f16d7d094c4a87d6e11eea1")
 
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
@@ -45,12 +46,13 @@ class MainPublisher():
                 try:
                     data = client_socket.recv(1024)
                     if data:
-                        # json_data = json.loads(data.decode('utf-8'))
-                        # print(f"Received command: {json_data}")
-
-                        decrypted_data = unpad(cipher.decrypt(data), AES.block_size)
+                        print(f"data: {data}")
+                        encrypted_data = base64.b64decode(data)
+                        print(f"encrypted data: {encrypted_data}")
+                        decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
                         print(f"Decrypted data: {decrypted_data}")
-                        json_data = json.loads(decrypted_data.decode('utf-8'))
+
+                        json_data = json.loads(decrypted_data.decode('utf-8', errors='ignore'))
                         print(f"Received command: {json_data}")
                         angle = self.parse_degree(json_data)
                         self.publish_turn_message(angle)
