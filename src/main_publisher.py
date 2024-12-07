@@ -3,6 +3,8 @@ import socket
 import json
 import threading
 import struct
+import time
+
 import paho.mqtt.client as mqtt
 from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Cipher import AES
@@ -10,12 +12,12 @@ from Crypto.Util.Padding import pad, unpad
 
 salt = b'\xda\x02\xd9A\xcd\x19\xd9U]x\xe10\xc1\xb5\x92\xbd\x0e\x8eA\x89\xafM\xf9KDf\x96\xb0\xfa+E\xb6'
 password = "veryStrongPassword"
-key = bytes.fromhex("6481218e4a2231a7eee6afa356fd098d386d5a58ff22ef03fe4d8bfea9bb5e48")
-iv = bytes.fromhex("da385e282f16d7d094c4a87d6e11eea1")
+key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\xdaxm\x1d\x9f\x84Z\xe8\xf6#'
+iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
-class MainPublisher(): 
+class MainPublisher():
 
     def __init__(self, broker_address="localhost"):
         self.client = mqtt.Client("MainPublisher")
@@ -44,41 +46,56 @@ class MainPublisher():
 
             while client_socket:
                 try:
-                    data = client_socket.recv(1024)
+                    data = client_socket.recv(2048)
+                    # data = b'3hCBtS2Vyn1ESLLlFy0KCYDjgiJweuvtv4aalWb+0klop3sOtrHzYYIEuHCRXluBw1mdKgiFnpdGf7d0aPzqCkzADtXBJvdAsj77F3r4siOFjQEuRcmj4knEDGYB+XIF3Sw//VpEYlPZcrl/x9hw32hntBHZHJx41a+kw36+S0iQdd5WkjxbJ2Z/BFg+OpmJkulmoVwUPmhodKamCZoKeNr1YWnPcXT11DOfGIj5uZg='
                     if data:
+                        print("type: ", type(data))
                         print(f"data: {data}")
                         encrypted_data = base64.b64decode(data)
                         print(f"encrypted data: {encrypted_data}")
                         decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
                         print(f"Decrypted data: {decrypted_data}")
 
-                        json_data = json.loads(decrypted_data.decode('utf-8', errors='ignore'))
-                        print(f"Received command: {json_data}")
-                        angle = self.parse_degree(json_data)
-                        self.publish_turn_message(angle)
-                        self.client_socket.send("ok".encode('utf-8'))
-                        enginee_data = self.parse_velocity(json_data)   
-                        self.publish_velocity_message(enginee_data)
-                        try:
-                            angle = self.parse_degree(json_data)
-                            self.publish_turn_message(angle)
-                            enginee_data = self.parse_velocity(json_data)
-                            self.publish_velocity_message(enginee_data)
-                            self.client_socket.send("ok".encode('utf-8'))
-                        except Exception as e:
-                            print(f"something wrong with received message: {e}")
-                            self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                        start_index = decrypted_data.find(b'{')
+                        if start_index != -1:
+                            json_data = decrypted_data[start_index:]
+                            try:
+                                json_data = json.loads(json_data.decode('utf-8'))
+                                print(f"Received command: {json_data}")
+                                angle = self.parse_degree(json_data)
+                                self.publish_turn_message(angle)
+                                self.client_socket.send("ok".encode('utf-8'))
+                                enginee_data = self.parse_velocity(json_data)
+                                self.publish_velocity_message(enginee_data)
+                                try:
+                                    angle = self.parse_degree(json_data)
+                                    self.publish_turn_message(angle)
+                                    enginee_data = self.parse_velocity(json_data)
+                                    self.publish_velocity_message(enginee_data)
+                                    self.client_socket.send("ok".encode('utf-8'))
+                                except Exception as e:
+                                    print(f"something wrong with received message: {e}")
+                                    self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+
+                            except json.JSONDecodeError as e:
+                                print(f"Error decoding JSON: {e}")
+                        else:
+                            print("JSON not found in the data.")
+
+
                     else:
                         print("Client disconnected unexpectedly.")
                         client_socket.close()
                         self.client_socket = None
                         break
+
                 except socket.timeout:
                     print(f"Brak wiadomości wyłączam silniki")
                     self.publish_velocity_message([0, 0])
                 except Exception as e:
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                # time.sleep(20)
         except Exception as e:
             print(f"Socket issue :{e}")
 
@@ -91,7 +108,7 @@ class MainPublisher():
             client_thread = threading.Thread(target=self.start_socket, args=(client_socket,))
             client_thread.start()
 
-    
+
 
     def destroy_node(self):
         if self.client_socket:
@@ -102,7 +119,7 @@ class MainPublisher():
 
     def publish_velocity_message(self, data):
         msg = struct.pack('ff', float(data[0]), float(data[1]))
-        self.client.publish(self.topic_publish_enginee, msg) 
+        self.client.publish(self.topic_publish_enginee, msg)
         print('Sending move engine data: "%s"' % data)
 
 
@@ -115,15 +132,15 @@ class MainPublisher():
     def parse_degree(self, json_data):
         return json_data.get("angle", {}).get("degree")
 
-    
+
     def parse_velocity(self, json_data):
         data = []
         data.append(json_data.get("force"))
         data.append(json_data.get("position", {}).get("y"))
         return data
 
-    
-    
+
+
 def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
@@ -134,7 +151,7 @@ if __name__ == '__main__':
     main()
     publisher.start_socket()
     main_publisher.client.loop_stop()
-    
+
 
 if __name__ == '__main__':
     main()
