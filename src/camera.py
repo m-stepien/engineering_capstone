@@ -17,7 +17,7 @@ class Camera():
         self.client.connect(broker_address)
         self.cap = cv2.VideoCapture(0, cv2.CAP_V4L2)  
         self.fps = 30
-        self.cap.set(cv2.CAP_PROP_FPS, fps)
+        self.cap.set(cv2.CAP_PROP_FPS, self.fps)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320) #640
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240) #480
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
@@ -46,7 +46,7 @@ class Camera():
                 if self.frame_counter == self.frame_to_send_number:
                     self.publish_camera_message(buffer)
                     self.frame_counter = 0
-                last_frame_time = time.perf_counter(buffer)
+                last_frame_time = time.perf_counter()
         
         except Exception as e:
             print(f"Error: {e}")
@@ -58,7 +58,7 @@ class Camera():
     
     def publish_camera_message(self, data):
         self.client.publish(self.topic_publish_camera, data.tobytes()) 
-        print('Sending move engine data: "%s"' % data)
+        print('Sending camera frame: "%s"' % data)
 
 def main():
     camera = Camera(broker_address="localhost", frame_to_send_number=160)
