@@ -59,3 +59,17 @@ class Camera():
     def publish_camera_message(self, data):
         self.client.publish(self.topic_publish_camera, data.tobytes()) 
         print('Sending move engine data: "%s"' % data)
+
+def main():
+    camera = Camera(broker_address="localhost", frame_to_send_number=160)
+    camera.client.loop_start() 
+    try:
+        camera.start_camera()
+    except KeyboardInterrupt:
+        print("Camera loop interrupted.")
+    finally:
+        camera.client.loop_stop() 
+        print("Camera application stopped.")
+
+if __name__ == '__main__':
+    main()
