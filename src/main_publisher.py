@@ -45,9 +45,6 @@ class MainPublisher():
                 try:
                     data = client_socket.recv(1024)
                     if data:
-                        # json_data = json.loads(data.decode('utf-8'))
-                        # print(f"Received command: {json_data}")
-
                         decrypted_data = unpad(cipher.decrypt(data), AES.block_size)
                         print(f"Decrypted data: {decrypted_data}")
                         json_data = json.loads(decrypted_data.decode('utf-8'))
@@ -127,6 +124,16 @@ def main(args=None):
     main_publisher.start_socket()
     main_publisher.client.loop_stop()
 
+def main():
+    camera = Camera(broker_address="localhost", frame_to_send_number=160)
+    camera.client.loop_start() 
+    try:
+        camera.start_camera()
+    except KeyboardInterrupt:
+        print("Camera loop interrupted.")
+    finally:
+        camera.client.loop_stop() 
+        print("Camera application stopped.")
+
 if __name__ == '__main__':
     main()
-

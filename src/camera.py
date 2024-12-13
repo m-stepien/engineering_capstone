@@ -6,7 +6,7 @@ import time
 import paho.mqtt.client as mqtt
 
 class Camera():
-    def __init__(self, broker_address="localhost", frame_to_send_number=40):
+    def __init__(self, broker_address="localhost", frame_to_send_number=160):
         self.client = mqtt.Client("Camera")
         self.frame_counter = 0
         self.frame_to_send_number = frame_to_send_number
@@ -21,7 +21,8 @@ class Camera():
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320) #640
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240) #480
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-        self.frame_duration = 1 / self.fps 
+        self.frame_duration = 1 / self.fps
+        self.topic_publish_camera = 'camera_data'
         if not self.cap.isOpened():
             print("Error: Camera not initialized!")
             self.cap.release()
@@ -43,8 +44,9 @@ class Camera():
                     time.sleep(self.frame_duration - elapsed_time)
                 self.frame_counter +=1
                 if self.frame_counter == self.frame_to_send_number:
-                    pass
-                last_frame_time = time.perf_counter()
+                    self.publish_camera_message(buffer)
+                    self.frame_counter = 0
+                last_frame_time = time.perf_counter(buffer)
         
         except Exception as e:
             print(f"Error: {e}")
@@ -52,3 +54,8 @@ class Camera():
             self.cap.release()
             cv2.destroyAllWindows()
             self.server_socket.close()
+    
+    
+    def publish_camera_message(self, data):
+        self.client.publish(self.topic_publish_camera, data.tobytes()) 
+        print('Sending move engine data: "%s"' % data)
