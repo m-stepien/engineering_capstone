@@ -30,7 +30,7 @@ class Camera():
             exit()
         print(f"Init succesuful")
 
-    def start_camer(self):
+    def start_camera(self):
         try:
             last_frame_time = time.perf_counter()
             while True:
