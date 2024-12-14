@@ -10,10 +10,10 @@ MAX_PULSE_WIDTH = 2.6/1000
 class Servo(AngularServo):
     def __init__(self):
         super().__init__(SERVO_CONTROL_PIN, min_pulse_width=MIN_PULSE_WIDTH, max_pulse_width=MAX_PULSE_WIDTH, pin_factory=PiGPIOFactory())
-        self.move(0)
+        self.angle = 0
         self.go_to = 0
         self.step = 1
-        self.pause = 0.05
+        self.pause = 0.005
         self.current_work = None
         self.running = False
 
