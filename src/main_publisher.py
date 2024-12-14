@@ -41,44 +41,52 @@ class MainPublisher():
     def start_socket(self, client_socket):
         try:
             client_socket.settimeout(3)
-
             while client_socket:
                 try:
-                    #data = client_socket.recv(1024)
                     data = client_socket.recv(2048)
                     if data:
                         encrypted_data = base64.b64decode(data)
                         decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
-                        print(f"Decrypted data: {decrypted_data}")
+                    #    print(f"Decrypted data: {decrypted_data}")
                         start_index = decrypted_data.find(b'{')
                         json_data = decrypted_data[start_index:]
                         if start_index != -1:
                             json_data = json.loads(json_data.decode('utf-8'))
                             print(f"Received command: {json_data}")
-                            angle = self.parse_degree(json_data)
-                            self.publish_turn_message(angle)
-                            enginee_data = self.parse_velocity(json_data)   
-                            self.publish_velocity_message(enginee_data)
-                            try:
+                            command_type = selg.get_command_type(json_data)
+                            if command_type == "move":
                                 angle = self.parse_degree(json_data)
                                 self.publish_turn_message(angle)
-                                enginee_data = self.parse_velocity(json_data)
+                                enginee_data = self.parse_velocity(json_data)   
                                 self.publish_velocity_message(enginee_data)
-                                self.client_socket.send("ok".encode('utf-8'))
-                            except Exception as e:
-                                print(f"something wrong with received message: {e}")
-                                self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                                try:
+                                    angle = self.parse_degree(json_data)
+                                    self.publish_turn_message(angle)
+                                    enginee_data = self.parse_velocity(json_data)
+                                    self.publish_velocity_message(enginee_data)
+                                    self.client_socket.send("ok".encode('utf-8'))
+                                except Exception as e:
+                                    print(f"something wrong with received message: {e}")
+                                    self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                            elif command_type == "hold":
+                                continue
+                            elif command_type == "stop":
+                                pass
+                            elif command_type == "break":
+                                pass
+                            else:
+                                print(f"There is no cuch command as {command_type}")
+                                continue
                     else:
                         print("Client disconnected unexpectedly.")
                         client_socket.close()
-                        self.client_socket = None
+                        client_socket = None
                         break
-                except socket.timeout:
-                    print(f"Brak wiadomości wyłączam silniki")
-                    self.publish_velocity_message([0, 0])
                 except Exception as e:
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+            print(f"Engine turn off")
+            self.publish_velocity_message([0, 0])
         except Exception as e:
             print(f"Socket issue :{e}")
 
@@ -121,6 +129,19 @@ class MainPublisher():
         data.append(json_data.get("force"))
         data.append(json_data.get("position", {}).get("y"))
         return data
+
+    def get_command_type(command):
+        command_type = json_data.get("type")
+        result command_type
+        if command_type == "move":
+            result = 1
+        elif command_type == "hold":
+            result = 2
+        elif command_type == "stop":
+            result = 3
+        elif command_type == "break":
+            result = 4
+
 
 
 def main(args=None):
