@@ -1,3 +1,4 @@
+import base64
 import socket
 import json
 import threading
@@ -9,12 +10,12 @@ from Crypto.Util.Padding import pad, unpad
 
 salt = b'\xda\x02\xd9A\xcd\x19\xd9U]x\xe10\xc1\xb5\x92\xbd\x0e\x8eA\x89\xafM\xf9KDf\x96\xb0\xfa+E\xb6'
 password = "veryStrongPassword"
-key = PBKDF2(password, salt, dkLen=32)
+key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\xdaxm\x1d\x9f\x84Z\xe8\xf6#'
 iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
-class MainPublisher(): 
+class MainPublisher():
 
     def __init__(self, broker_address="localhost"):
         self.client = mqtt.Client("MainPublisher")
@@ -43,25 +44,30 @@ class MainPublisher():
 
             while client_socket:
                 try:
-                    data = client_socket.recv(1024)
+                    #data = client_socket.recv(1024)
+                    data = client_socket.recv(2048)
                     if data:
-                        decrypted_data = unpad(cipher.decrypt(data), AES.block_size)
+                        encrypted_data = base64.b64decode(data)
+                        decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
                         print(f"Decrypted data: {decrypted_data}")
-                        json_data = json.loads(decrypted_data.decode('utf-8'))
-                        print(f"Received command: {json_data}")
-                        angle = self.parse_degree(json_data)
-                        self.publish_turn_message(angle)
-                        enginee_data = self.parse_velocity(json_data)   
-                        self.publish_velocity_message(enginee_data)
-                        try:
+                        start_index = decrypted_data.find(b'{')
+                        json_data = decrypted_data[start_index:]
+                        if start_index != -1:
+                            json_data = json.loads(json_data.decode('utf-8'))
+                            print(f"Received command: {json_data}")
                             angle = self.parse_degree(json_data)
                             self.publish_turn_message(angle)
-                            enginee_data = self.parse_velocity(json_data)
+                            enginee_data = self.parse_velocity(json_data)   
                             self.publish_velocity_message(enginee_data)
-                            self.client_socket.send("ok".encode('utf-8'))
-                        except Exception as e:
-                            print(f"something wrong with received message: {e}")
-                            self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                            try:
+                                angle = self.parse_degree(json_data)
+                                self.publish_turn_message(angle)
+                                enginee_data = self.parse_velocity(json_data)
+                                self.publish_velocity_message(enginee_data)
+                                self.client_socket.send("ok".encode('utf-8'))
+                            except Exception as e:
+                                print(f"something wrong with received message: {e}")
+                                self.client_socket.send("Something is wrong check the command".encode('utf-8'))
                     else:
                         print("Client disconnected unexpectedly.")
                         client_socket.close()
@@ -96,7 +102,7 @@ class MainPublisher():
 
     def publish_velocity_message(self, data):
         msg = struct.pack('ff', float(data[0]), float(data[1]))
-        self.client.publish(self.topic_publish_enginee, msg) 
+        self.client.publish(self.topic_publish_enginee, msg)
         print('Sending move engine data: "%s"' % data)
 
 
@@ -116,13 +122,13 @@ class MainPublisher():
         data.append(json_data.get("position", {}).get("y"))
         return data
 
-    
-    
+
 def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
     main_publisher.start_socket()
     main_publisher.client.loop_stop()
+
 
 if __name__ == '__main__':
     main()
