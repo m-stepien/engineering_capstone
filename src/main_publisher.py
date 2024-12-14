@@ -71,9 +71,9 @@ class MainPublisher():
                             elif command_type == "hold":
                                 continue
                             elif command_type == "stop":
-                                pass
+                                self.publish_velocity_message([0, 0])
                             elif command_type == "break":
-                                pass
+                                self.publish_velocity_message([-1, 0])
                             else:
                                 print(f"There is no cuch command as {command_type}")
                                 continue
@@ -86,7 +86,7 @@ class MainPublisher():
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
             print(f"Engine turn off")
-            self.publish_velocity_message([0, 0])
+            self.publish_velocity_message([-1, 0])
         except Exception as e:
             print(f"Socket issue :{e}")
 
