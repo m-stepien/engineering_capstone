@@ -36,3 +36,22 @@ class Servo(AngularServo):
 
 
 #ewentualne dołożenie dynamicznej zmiany stepu
+
+
+#testy na szybko
+servo = Servo()
+servo.start_go_to(40)
+sleep(3)
+servo.start_go_to(-40)
+sleep(3)
+
+
+# servo.start_go_to(40)
+# sleep(1)
+# servo.start_go_to(-40)
+# sleep(1)
+
+# servo.start_go_to(40)
+# sleep(0.20)
+# servo.start_go_to(-40)
+# sleep(3)
