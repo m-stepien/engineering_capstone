@@ -1,6 +1,5 @@
 import paho.mqtt.client as mqtt
 import struct
-from motor import Motor
 
 
 class EngineDataHandler():
@@ -28,11 +27,11 @@ class EngineDataHandler():
         print(f"Subscribing to topic: {self.topic}")
         self.client.loop_forever()
 
-    def send_speed(self, v, d):
+    def send_speed(self, v, d, break_command):
         try:
             vp = self.v_map(v)
             db = self.d_map(d)
-            msg = struct.pack('i?', int(vp), db)
+            msg = struct.pack('i??', int(vp), db, break_command)
             self.client.publish(self.publish_topic, msg)
         except Exception as e:
             print(f"Issue with sending speed: {e}")
@@ -51,11 +50,12 @@ class EngineDataHandler():
 
     def listener_callback(self, client, userdata, msg):
         try:
-            unpacked_data = struct.unpack('ff', msg.payload)
+            unpacked_data = struct.unpack('ff?', msg.payload)
             v = unpacked_data[0]
             direction = unpacked_data[1]
+            break_command = unpacked_data[2]
             print(f'Received: {unpacked_data}')
-            self.send_speed(v, direction)
+            self.send_speed(v, direction, break_command)
         except struct.error as e:
             print(f"Error unpacking message payload: {e}")
 
