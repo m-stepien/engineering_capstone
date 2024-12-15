@@ -21,18 +21,22 @@ class EngineSubscriber():
     
     def listener_callback(self, client, userdata, msg):
         try:
-            unpacked_data = struct.unpack('i?', msg.payload)
+            unpacked_data = struct.unpack('i??', msg.payload)
         except Exception as e:
             print(f"Issue with unpacking struct: {e}")
             return 0
-
         v = unpacked_data[0]
         d = unpacked_data[1]
-        if d:
-            self.motor.move_forward(v)
+        is_break_command = unpacked_data[2]
+        if is_break_command:
+            self.motor.stop()
         else:
-            self.motor.move_backward(v)    
-        print(f'Received: {v}')
+            if d:
+                self.motor.move_forward(v)
+                print(f'Moving forward with velocity: {v}')
+            else:
+                self.motor.move_backward(v)    
+                print(f'Moving backward with velocity: {v}')
 
     
     def start(self):
