@@ -55,10 +55,6 @@ class MainPublisher():
                             print(f"Received command: {json_data}")
                             command_type = self.get_command_type(json_data)
                             if command_type == "move":
-                                angle = self.parse_degree(json_data)
-                                self.publish_turn_message(angle)
-                                enginee_data = self.parse_velocity(json_data)   
-                                self.publish_velocity_message(enginee_data)
                                 try:
                                     angle = self.parse_degree(json_data)
                                     self.publish_turn_message(angle)
@@ -71,9 +67,9 @@ class MainPublisher():
                             elif command_type == "hold":
                                 continue
                             elif command_type == "stop":
-                                self.publish_velocity_message([0, 0])
+                                self.publish_velocity_message([0, 0, False])
                             elif command_type == "break":
-                                self.publish_velocity_message([-1, 0])
+                                self.publish_velocity_message([0, 0, True])
                             else:
                                 print(f"There is no cuch command as {command_type}")
                                 continue
@@ -83,12 +79,12 @@ class MainPublisher():
                         client_socket = None
                         break
                 except socket.timeout:
-                    self.publish_velocity_message([0, 0])
+                    self.publish_velocity_message([0, 0, True])
                 except Exception as e:
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
             print(f"Engine turn off")
-            self.publish_velocity_message([-1, 0])
+            self.publish_velocity_message([0, 0, True])
         except Exception as e:
             print(f"Socket issue :{e}")
 
@@ -111,7 +107,7 @@ class MainPublisher():
 
 
     def publish_velocity_message(self, data):
-        msg = struct.pack('ff', float(data[0]), float(data[1]))
+        msg = struct.pack('ff?', float(data[0]), float(data[1]), data(2))
         self.client.publish(self.topic_publish_enginee, msg)
         print('Sending move engine data: "%s"' % data)
 
@@ -130,10 +126,12 @@ class MainPublisher():
         data = []
         data.append(json_data.get("force"))
         data.append(json_data.get("position", {}).get("y"))
+        command_type = self.get_command_type(json_data)
+        data.append(command_type == "break")
         return data
 
     def get_command_type(command):
-        command_type = json_data.get("type")
+        command_type = command.get("type")
         return command_type
 
 
