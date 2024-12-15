@@ -134,15 +134,7 @@ class MainPublisher():
 
     def get_command_type(command):
         command_type = json_data.get("type")
-        result command_type
-        if command_type == "move":
-            result = 1
-        elif command_type == "hold":
-            result = 2
-        elif command_type == "stop":
-            result = 3
-        elif command_type == "break":
-            result = 4
+        return command_type
 
 
 
