@@ -53,7 +53,7 @@ class MainPublisher():
                         if start_index != -1:
                             json_data = json.loads(json_data.decode('utf-8'))
                             print(f"Received command: {json_data}")
-                            command_type = selg.get_command_type(json_data)
+                            command_type = self.get_command_type(json_data)
                             if command_type == "move":
                                 angle = self.parse_degree(json_data)
                                 self.publish_turn_message(angle)
@@ -82,6 +82,8 @@ class MainPublisher():
                         client_socket.close()
                         client_socket = None
                         break
+                except socket.timeout:
+                    self.publish_velocity_message([0, 0])
                 except Exception as e:
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
