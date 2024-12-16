@@ -1,7 +1,7 @@
 import cv2
 import socket
 import pickle
-import numpy as np
+import numpy as np  
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1)
