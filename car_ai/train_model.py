@@ -28,7 +28,7 @@ def train_model():
         target_size=(64, 64),
         batch_size=32,
         class_mode='categorical',
-        classes=['50', '70', '100']
+        classes=['50', '70', '100', 'null']
     )
 
     validation_generator = validation_datagen.flow_from_directory(
@@ -36,7 +36,7 @@ def train_model():
         target_size=(64, 64),
         batch_size=32,
         class_mode='categorical',
-        classes=['50', '70', '100']
+        classes=['50', '70', '100', 'null']
     )
 
     model = models.Sequential([
@@ -50,9 +50,8 @@ def train_model():
         layers.Flatten(),
         layers.Dense(128, activation='relu'),
         layers.Dropout(0.5),
-        layers.Dense(3, activation='softmax')
+        layers.Dense(4, activation='softmax')
     ])
-
 
     model.compile(optimizer='adam',
                   loss='categorical_crossentropy',
@@ -82,6 +81,13 @@ def predict_image(image_path):
     img_array = expand_dims(img_array, 0)
 
     predictions = model.predict(img_array)
+    confidence = predictions.max(axis=-1)[0]
     class_idx = predictions.argmax(axis=-1)[0]
-    class_labels = ['50', '70', '100']
-    print(f'Predykcja: {class_labels[class_idx]}')
+
+    threshold = 0.5
+    class_labels = ['50', '70', '100', 'null']
+
+    if confidence < threshold or class_labels[class_idx] == 'null':
+        return None
+
+    return class_labels[class_idx]
