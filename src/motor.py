@@ -17,19 +17,26 @@ class Motor():
         self.running = True
         self.current_work = threading.Thread(target=self.speed_modifier, daemon=True)
         self.current_work.start()
+        self.before = 0
         
 
 
     def move_forward(self,speed):
+        if self.before==-1:
+            self.stop()
         GPIO.output(16, True)
         GPIO.output(18, False)
         self.target_speed = speed
+        self.before = 1
 
 
     def move_backward(self,speed):
+        if self.before==1:
+            self.stop()
         GPIO.output(16, False)
         GPIO.output(18, True)
         self.target_speed = speed
+        self.before=-1
     
 
     def speed_modifier(self):
@@ -51,6 +58,7 @@ class Motor():
         GPIO.output(18, False)
         self.immediate_change = True
         self.target_speed = 0
+        self.before = 0
 
 
     def cleanup(self):
