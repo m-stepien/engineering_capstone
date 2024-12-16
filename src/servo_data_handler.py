@@ -16,6 +16,7 @@ class ServoDataHandler():
         self.publish_topic = publish_topic
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
+        self.max_angle = 40
         print("Init successful")
 
     def angle_map(self, a):
@@ -25,6 +26,7 @@ class ServoDataHandler():
             mapped = 180 - (a - 180) - 90
         else:
             mapped = -90 + 360 - a
+        mapped = mapped / 90 * self.max_angle
         return int(mapped)
 
     def send_angle(self, a):
