@@ -107,7 +107,7 @@ class MainPublisher():
 
 
     def publish_velocity_message(self, data):
-        msg = struct.pack('ff?', float(data[0]), float(data[1]), data(2))
+        msg = struct.pack('ff?', float(data[0]), float(data[1]), data[2])
         self.client.publish(self.topic_publish_enginee, msg)
         print('Sending move engine data: "%s"' % data)
 
