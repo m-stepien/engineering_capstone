@@ -26,7 +26,7 @@ class Servo(AngularServo):
             sleep(self.pause)
     
 
-    def go_to(self, angle):
+    def start_go_to(self, angle):
         if not self.running:
             self.running = True
             self.current_work = threading.Thread(target=self.move, daemon=True)
