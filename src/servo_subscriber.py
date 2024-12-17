@@ -22,7 +22,7 @@ class ServoSubscriber():
     def listener_callback(self, client, userdata, msg):
         try:
             angle = struct.unpack('i', msg.payload)[0]
-            self.servo.move(angle)
+            self.servo.go_to(angle)
             print("ServoSubscrivber")
             print(f"Received: {angle}")
         except Exception as e:
