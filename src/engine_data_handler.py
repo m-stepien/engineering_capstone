@@ -1,10 +1,9 @@
 import paho.mqtt.client as mqtt
 import struct
 
-# ["controller_enginee_data", "max_speed_data"]
 class EngineDataHandler():
 
-    def __init__(self, broker_address="localhost", topic="controller_enginee_data", publish_topic='enginee_velocity'):
+    def __init__(self, broker_address="localhost", topic=[("controller_enginee_data", 0), ("max_speed_data", 0)], publish_topic='enginee_velocity'):
         self.client = mqtt.Client("EngineDataHandler")
         try:
             self.client.connect(broker_address)
@@ -44,36 +43,25 @@ class EngineDataHandler():
         return d >= 0
 
     def listener_callback(self, client, userdata, msg):
-        print("eeeeee in if")
-        try:
-            print("get topic controller_enginee_data")
-            unpacked_data = struct.unpack('ff?', msg.payload)
-            v = unpacked_data[0]
-            direction = unpacked_data[1]
-            break_command = unpacked_data[2]
-            print(f'Received: {unpacked_data}')
-            self.send_speed(v, direction, break_command)
-        except struct.error as e:
-            print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
-        # print("listener callback engine_data_handler")
-        # if msg.topic == "controller_enginee_data":
-        #     print("eeeeee in if")
-        #     try:
-        #         print("get topic controller_enginee_data")
-        #         unpacked_data = struct.unpack('ff?', msg.payload)
-        #         v = unpacked_data[0]
-        #         direction = unpacked_data[1]
-        #         break_command = unpacked_data[2]
-        #         print(f'Received: {unpacked_data}')
-        #         self.send_speed(v, direction, break_command)
-        #     except struct.error as e:
-        #         print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
-        # elif msg.topic == "max_speed_data":
-        #     try:
-        #         unpacked_data = struct.unpack('i', msg.payload)
-        #         self.max_velocity_value = unpacked_data[0]
-        #     except struct.error as e:
-        #         print(f"Error unpacking message on topic max_speed_data payload: {e}")
+        print("listener callback engine_data_handler")
+        if msg.topic == "controller_enginee_data":
+            print("eeeeee in if")
+            try:
+                print("get topic controller_enginee_data")
+                unpacked_data = struct.unpack('ff?', msg.payload)
+                v = unpacked_data[0]
+                direction = unpacked_data[1]
+                break_command = unpacked_data[2]
+                print(f'Received: {unpacked_data}')
+                self.send_speed(v, direction, break_command)
+            except struct.error as e:
+                print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
+        elif msg.topic == "max_speed_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.max_velocity_value = unpacked_data[0]
+            except struct.error as e:
+                print(f"Error unpacking message on topic max_speed_data payload: {e}")
 
 
 def main(args=None):
