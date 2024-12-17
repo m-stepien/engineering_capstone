@@ -31,7 +31,7 @@ class MainPublisher():
             self.server_socket.bind(('0.0.0.0', 12345))
             self.server_socket.listen(1)
             self.client_socket = None
-            print("init succesfull")
+            print("init succesfull main publisher")
             self.accept_connection()
         except Exception as e:
             print(f"Issue during server socker creation: {e}")

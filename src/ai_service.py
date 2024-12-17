@@ -16,7 +16,7 @@ class AiService():
         except Exception as e:
             print(f"Error subscribing to topic {self.topic}: {e}")
         self.client.on_message = self.listener_callback
-        print("Init successful")
+        print("Init successful Ai Service")
 
     def listener_callback(self, client, userdata, msg):
         try:

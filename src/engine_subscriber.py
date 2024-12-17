@@ -16,7 +16,7 @@ class EngineSubscriber():
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
         self.motor = Motor()
-        print("Init successful")
+        print("Init successful engine subscriber")
 
     
     def listener_callback(self, client, userdata, msg):

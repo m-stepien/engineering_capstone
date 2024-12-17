@@ -21,7 +21,7 @@ class EngineDataHandler():
             print(f"Error subscribing to topic {self.topic}: {e}")
 
         self.client.on_message = self.listener_callback
-        print("Init successful")
+        print("Init successful engine_data_handler")
 
     def start(self):
         print(f"Subscribing to topic: {self.topic}")

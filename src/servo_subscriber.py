@@ -16,7 +16,7 @@ class ServoSubscriber():
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
         self.servo = Servo()
-        print("Init successful")
+        print("Init successful servo subscriber")
 
         
     def listener_callback(self, client, userdata, msg):
