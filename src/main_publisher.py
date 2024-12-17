@@ -130,7 +130,7 @@ class MainPublisher():
         data.append(command_type == "break")
         return data
 
-    def get_command_type(command):
+    def get_command_type(self, command):
         command_type = command.get("type")
         return command_type
 
