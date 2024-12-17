@@ -47,7 +47,6 @@ class MainPublisher():
                     if data:
                         encrypted_data = base64.b64decode(data)
                         decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
-                    #    print(f"Decrypted data: {decrypted_data}")
                         start_index = decrypted_data.find(b'{')
                         json_data = decrypted_data[start_index:]
                         if start_index != -1:

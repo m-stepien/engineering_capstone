@@ -51,6 +51,7 @@ class EngineDataHandler():
     def listener_callback(self, client, userdata, msg):
         if msg.topic == "controller_enginee_data":
             try:
+                print("get topic controller_enginee_data")
                 unpacked_data = struct.unpack('ff?', msg.payload)
                 v = unpacked_data[0]
                 direction = unpacked_data[1]
