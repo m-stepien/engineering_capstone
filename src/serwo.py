@@ -17,7 +17,7 @@ class Servo(AngularServo):
         self.current_work = None
         self.running = False
 
-    def move(self, angle):
+    def move(self):
         while self.running:
             if self.angle < self.go_to:
                 self.angle += self.step
@@ -44,11 +44,11 @@ class Servo(AngularServo):
 
 
 #testy na szybko
-servo = Servo()
-servo.start_go_to(40)
-sleep(3)
-servo.start_go_to(-40)
-sleep(3)
+# servo = Servo()
+# servo.start_go_to(40)
+# sleep(3)
+# servo.start_go_to(-40)
+# sleep(3)
 
 
 # servo.start_go_to(40)
