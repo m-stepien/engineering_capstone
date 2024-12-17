@@ -24,8 +24,8 @@ class Motor():
     def move_forward(self,speed):
         if self.before==-1:
             self.stop()
-        GPIO.output(16, True)
-        GPIO.output(18, False)
+        GPIO.output(16, False)
+        GPIO.output(18, True)
         self.target_speed = speed
         self.before = 1
 
@@ -33,8 +33,8 @@ class Motor():
     def move_backward(self,speed):
         if self.before==1:
             self.stop()
-        GPIO.output(16, False)
-        GPIO.output(18, True)
+        GPIO.output(16, True)
+        GPIO.output(18, False)
         self.target_speed = speed
         self.before=-1
     
