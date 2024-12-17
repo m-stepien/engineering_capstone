@@ -17,7 +17,7 @@ cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 class MainPublisher():
 
-    def __init__(self, broker_address="localhost"):
+    def __init__(self, broker_address="localhost", topic=["max_velocity_data", "current_velocity_data"]):
         self.client = mqtt.Client("MainPublisher")
         try:
             self.client.connect(broker_address)
@@ -31,10 +31,15 @@ class MainPublisher():
             self.server_socket.bind(('0.0.0.0', 12345))
             self.server_socket.listen(1)
             self.client_socket = None
+            self.curent_velocity_info = 0
+            self.max_velocity_info = 100
             print("init succesfull")
             self.accept_connection()
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
+        self.topic = topic
+        self.client.subscribe(self.topic)
+        self.client.on_message = self.listener_callback
 
 
 
@@ -133,6 +138,22 @@ class MainPublisher():
     def get_command_type(command):
         command_type = command.get("type")
         return command_type
+
+
+    def listener_callback(self, client, userdata, msg):
+        if msg.topic == "current_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.curent_velocity_info = unpacked_data[0]
+            except struct.error as e:
+                print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
+        elif msg.topic == "max_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.max_velocity_info = unpacked_data[0]
+            except struct.error as e:
+                print(f"Error unpacking message on topic max_speed_data payload: {e}")
+
 
 
 
