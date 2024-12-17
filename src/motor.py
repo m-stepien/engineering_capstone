@@ -61,6 +61,10 @@ class Motor():
         self.before = 0
 
 
+    def get_current_speed(self):
+        return self.current_speed
+
+
     def cleanup(self):
         GPIO.cleanup()
 

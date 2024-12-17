@@ -4,7 +4,7 @@ import struct
 
 class EngineDataHandler():
 
-    def __init__(self, broker_address="localhost", topic=["controller_enginee_data", "max_speed_data"], publish_topic='enginee_velocity'):
+    def __init__(self, broker_address="localhost", topic=["controller_enginee_data", "max_speed_data"], publish_topic='enginee_velocity', max_velocity_topic="max_velocity_data"):
         self.client = mqtt.Client("EngineDataHandler")
         try:
             self.client.connect(broker_address)
@@ -27,6 +27,15 @@ class EngineDataHandler():
         print(f"Subscribing to topic: {self.topic}")
         self.client.loop_forever()
 
+
+    def send_max_velocity(self):
+        try:
+            msg = struct.pack('i', int(self.max_velocity_value))
+            self.client.publish(self.max_velocity_topic, msg)
+        except Exception as e:
+            print(f"Issue with sending speed: {e}")    
+
+
     def send_speed(self, v, d, break_command):
         try:
             vp = self.v_map(v)
@@ -45,8 +54,10 @@ class EngineDataHandler():
         except Exception as e:
             print(f"Error in v_map: {e}")
 
+
     def d_map(self, d):
         return d >= 0
+
 
     def listener_callback(self, client, userdata, msg):
         if msg.topic == "controller_enginee_data":
@@ -63,6 +74,7 @@ class EngineDataHandler():
             try:
                 unpacked_data = struct.unpack('i', msg.payload)
                 self.max_velocity_value = unpacked_data[0]
+                self.send_max_velocity()
             except struct.error as e:
                 print(f"Error unpacking message on topic max_speed_data payload: {e}")
 
