@@ -142,17 +142,18 @@ class MainPublisher():
     
 
     def send_velocity_data(self):
-        try:
-            data = {
-                "current_velocity": self.curent_velocity_info,
-                "max_velocity": self.max_velocity_info
-            }
-            serialized_data = json.dumps(data).encode('utf-8')
-            encoded_data = base64.b64encode(serialized_data)
-            self.client_socket.send(encoded_data)
-            print(f"Sent velocity data: {data}")
-        except Exception as e:
-            print(f"Error sending velocity data: {e}")
+        if self.client_socket:
+            try:
+                data = {
+                    "current_velocity": self.curent_velocity_info,
+                    "max_velocity": self.max_velocity_info
+                }
+                serialized_data = json.dumps(data).encode('utf-8')
+                encoded_data = base64.b64encode(serialized_data)
+                self.client_socket.send(encoded_data)
+                print(f"Sent velocity data: {data}")
+            except Exception as e:
+                print(f"Error sending velocity data: {e}")
 
 
     def listener_callback(self, client, userdata, msg):
