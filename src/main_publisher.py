@@ -17,7 +17,7 @@ cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 class MainPublisher():
 
-    def __init__(self, broker_address="localhost", topic=[("max_velocity_data", 0), ("current_velocity_data", 0)]):
+    def __init__(self, broker_address="localhost", topic=[("current_velocity_data", 0), ("max_velocity_data", 0)]):
         self.client = mqtt.Client("MainPublisher")
         try:
             self.client.connect(broker_address)
