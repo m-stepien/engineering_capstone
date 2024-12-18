@@ -75,7 +75,7 @@ class MainPublisher():
                             elif command_type == "break":
                                 self.publish_velocity_message([0, 0, True])
                             else:
-                                print(f"There is no cuch command as {command_type}")
+                                print(f"There is no such command as {command_type}")
                                 continue
                     else:
                         print("Client disconnected unexpectedly.")
@@ -87,6 +87,7 @@ class MainPublisher():
                 except Exception as e:
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                self.show_me_velocity()
             print(f"Engine turn off")
             self.publish_velocity_message([0, 0, True])
         except Exception as e:
@@ -138,6 +139,10 @@ class MainPublisher():
     def get_command_type(self, command):
         command_type = command.get("type")
         return command_type
+    
+    def show_me_velocity(self):
+        print(f"MAIN PUBLISHER CURRENT {self.curent_velocity_info}")
+        print(f"MAIN PUBLISHER MAX {self.max_velocity_info}")
 
 
     def listener_callback(self, client, userdata, msg):
