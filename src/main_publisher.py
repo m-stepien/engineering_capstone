@@ -38,9 +38,8 @@ class MainPublisher():
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
         self.topic = topic
-        self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
-
+        self.client.subscribe(self.topic)
 
 
     def start_socket(self, client_socket):
