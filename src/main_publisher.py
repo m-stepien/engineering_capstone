@@ -37,7 +37,6 @@ class MainPublisher():
             self.client.subscribe(self.topic)
             self.client.on_message = self.listener_callback
             print("init succesfull main publisher")
-            self.accept_connection()
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
 
@@ -175,9 +174,10 @@ class MainPublisher():
 
 def main(args=None):
     main_publisher = MainPublisher()
-    main_publisher.start_socket()
-    main_publisher.client.loop_forever()
+    main_publisher.client.loop_start()
+    main_publisher.accept_connection()
     main_publisher.client.loop_stop()
+    
 
 
 if __name__ == '__main__':
