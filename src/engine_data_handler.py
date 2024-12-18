@@ -29,7 +29,7 @@ class EngineDataHandler():
             msg = struct.pack('i', int(self.max_velocity_value))
             self.client.publish(self.max_velocity_topic, msg)
         except Exception as e:
-            print(f"Issue with sending speed: {e}")    
+            print(f"TEST ISSUE Issue with sending speed: {e}")    
 
 
     def send_speed(self, v, d, break_command):
