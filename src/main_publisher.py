@@ -14,10 +14,10 @@ key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\x
 iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
-
+# topic=[("current_velocity_data", 0), ("max_velocity_data", 0)]
 class MainPublisher():
 
-    def __init__(self, broker_address="localhost", topic=[("current_velocity_data", 0), ("max_velocity_data", 0)]):
+    def __init__(self, broker_address="localhost", topic="current_velocity_data"):
         self.client = mqtt.Client("MainPublisher")
         try:
             self.client.connect(broker_address)
@@ -38,8 +38,9 @@ class MainPublisher():
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
         self.topic = topic
-        self.client.on_message = self.listener_callback
         self.client.subscribe(self.topic)
+        self.client.on_message = self.listener_callback
+        
 
 
     def start_socket(self, client_socket):
@@ -146,21 +147,27 @@ class MainPublisher():
 
 
     def listener_callback(self, client, userdata, msg):
-        if msg.topic == "current_velocity_data":
-            try:
-                unpacked_data = struct.unpack('i', msg.payload)
-                print(f"HERE2 get velocity {unpacked_data[0]}")
-                self.curent_velocity_info = unpacked_data[0]
-            except struct.error as e:
-                print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
-        elif msg.topic == "max_velocity_data":
-            try:
-                unpacked_data = struct.unpack('i', msg.payload)
-                self.max_velocity_info = unpacked_data[0]
-            except struct.error as e:
-                print(f"Error unpacking message on topic max_speed_data payload: {e}")
-        else:
-            print("ISSUE TEST im not even in if")
+        try:
+            unpacked_data = struct.unpack('i', msg.payload)
+            print(f"HERE2 get velocity {unpacked_data[0]}")
+            self.curent_velocity_info = unpacked_data[0]
+        except struct.error as e:
+            print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
+        # if msg.topic == "current_velocity_data":
+        #     try:
+        #         unpacked_data = struct.unpack('i', msg.payload)
+        #         print(f"HERE2 get velocity {unpacked_data[0]}")
+        #         self.curent_velocity_info = unpacked_data[0]
+        #     except struct.error as e:
+        #         print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
+        # elif msg.topic == "max_velocity_data":
+        #     try:
+        #         unpacked_data = struct.unpack('i', msg.payload)
+        #         self.max_velocity_info = unpacked_data[0]
+        #     except struct.error as e:
+        #         print(f"Error unpacking message on topic max_speed_data payload: {e}")
+        # else:
+        #     print("ISSUE TEST im not even in if")
 
 
 
