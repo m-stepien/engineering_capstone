@@ -150,6 +150,7 @@ class MainPublisher():
         if msg.topic == "current_velocity_data":
             try:
                 unpacked_data = struct.unpack('i', msg.payload)
+                print(f"HERE2 get velocity {unpacked_data[0]}")
                 self.curent_velocity_info = unpacked_data[0]
             except struct.error as e:
                 print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
@@ -159,6 +160,8 @@ class MainPublisher():
                 self.max_velocity_info = unpacked_data[0]
             except struct.error as e:
                 print(f"Error unpacking message on topic max_speed_data payload: {e}")
+        else:
+            print("ISSUE TEST im not even in if")
 
 
 
