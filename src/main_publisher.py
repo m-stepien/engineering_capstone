@@ -179,7 +179,7 @@ class MainPublisher():
 def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
-    main_publisher.start_socket()
+    main_publisher.accept_connection()
     main_publisher.client.loop_stop()
     
 
