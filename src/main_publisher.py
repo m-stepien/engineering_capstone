@@ -33,7 +33,7 @@ class MainPublisher():
             self.client_socket = None
             self.curent_velocity_info = 0
             self.max_velocity_info = 100
-            print("init succesfull")
+            print("init succesfull main publisher")
             self.accept_connection()
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
@@ -52,7 +52,6 @@ class MainPublisher():
                     if data:
                         encrypted_data = base64.b64decode(data)
                         decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
-                    #    print(f"Decrypted data: {decrypted_data}")
                         start_index = decrypted_data.find(b'{')
                         json_data = decrypted_data[start_index:]
                         if start_index != -1:
@@ -112,7 +111,8 @@ class MainPublisher():
 
 
     def publish_velocity_message(self, data):
-        msg = struct.pack('ff?', float(data[0]), float(data[1]), data(2))
+        print("jestem w publish_velocity")
+        msg = struct.pack('ff?', float(data[0]), float(data[1]), data[2])
         self.client.publish(self.topic_publish_enginee, msg)
         print('Sending move engine data: "%s"' % data)
 
@@ -135,7 +135,7 @@ class MainPublisher():
         data.append(command_type == "break")
         return data
 
-    def get_command_type(command):
+    def get_command_type(self, command):
         command_type = command.get("type")
         return command_type
 

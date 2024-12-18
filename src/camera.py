@@ -28,7 +28,7 @@ class Camera():
             self.cap.release()
             self.server_socket.close()
             exit()
-        print(f"Init succesuful")
+        print(f"Init succesuful camera")
 
     def start_camera(self):
         try:

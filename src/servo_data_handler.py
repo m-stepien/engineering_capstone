@@ -17,7 +17,7 @@ class ServoDataHandler():
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
         self.max_angle = 40
-        print("Init successful")
+        print("Init successful sevo data handler")
 
     def angle_map(self, a):
         if a < 180:

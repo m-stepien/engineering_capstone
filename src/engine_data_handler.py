@@ -1,10 +1,10 @@
 import paho.mqtt.client as mqtt
 import struct
 
-
 class EngineDataHandler():
 
-    def __init__(self, broker_address="localhost", topic=["controller_enginee_data", "max_speed_data"], publish_topic='enginee_velocity', max_velocity_topic="max_velocity_data"):
+
+    def __init__(self, broker_address="localhost", topic=[("controller_enginee_data", 0), ("max_speed_data", 0)], publish_topic='enginee_velocity', max_velocity_topic="max_velocity_data"):
         self.client = mqtt.Client("EngineDataHandler")
         try:
             self.client.connect(broker_address)
@@ -14,14 +14,9 @@ class EngineDataHandler():
         self.topic = topic
         self.publish_topic = publish_topic
         self.max_velocity_value = 100
-
-        try:
-            self.client.subscribe(self.topic)
-        except Exception as e:
-            print(f"Error subscribing to topic {self.topic}: {e}")
-
+        self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
-        print("Init successful")
+        print("Init successful engine_data_handler")
 
     def start(self):
         print(f"Subscribing to topic: {self.topic}")
@@ -60,8 +55,11 @@ class EngineDataHandler():
 
 
     def listener_callback(self, client, userdata, msg):
+        print("listener callback engine_data_handler")
         if msg.topic == "controller_enginee_data":
+            print("eeeeee in if")
             try:
+                print("get topic controller_enginee_data")
                 unpacked_data = struct.unpack('ff?', msg.payload)
                 v = unpacked_data[0]
                 direction = unpacked_data[1]
