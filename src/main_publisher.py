@@ -160,12 +160,14 @@ class MainPublisher():
             try:
                 unpacked_data = struct.unpack('i', msg.payload)
                 self.curent_velocity_info = unpacked_data[0]
+                self.send_velocity_data()
             except struct.error as e:
                 print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
         elif msg.topic == "max_velocity_data":
             try:
                 unpacked_data = struct.unpack('i', msg.payload)
                 self.max_velocity_info = unpacked_data[0]
+                self.send_velocity_data()
             except struct.error as e:
                 print(f"Error unpacking message on topic max_speed_data payload: {e}")
 
