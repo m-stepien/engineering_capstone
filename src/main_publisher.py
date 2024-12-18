@@ -33,13 +33,14 @@ class MainPublisher():
             self.client_socket = None
             self.curent_velocity_info = 0
             self.max_velocity_info = 100
+            self.topic = topic
+            self.client.subscribe(self.topic)
+            self.client.on_message = self.listener_callback
             print("init succesfull main publisher")
             self.accept_connection()
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
-        self.topic = topic
-        self.client.subscribe(self.topic)
-        self.client.on_message = self.listener_callback
+
         
 
 
