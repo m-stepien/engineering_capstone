@@ -141,33 +141,34 @@ class MainPublisher():
         return command_type
     
 
-    def show_me_velocity(self):
-        print(f"MAIN PUBLISHER CURRENT {self.curent_velocity_info}")
-        print(f"MAIN PUBLISHER MAX {self.max_velocity_info}")
+    def send_velocity_data(self):
+        try:
+            data = {
+                "current_velocity": self.curent_velocity_info,
+                "max_velocity": self.max_velocity_info
+            }
+            serialized_data = json.dumps(data).encode('utf-8')
+            encoded_data = base64.b64encode(serialized_data)
+            self.client_socket.send(encoded_data)
+            print(f"Sent velocity data: {data}")
+        except Exception as e:
+            print(f"Error sending velocity data: {e}")
 
 
     def listener_callback(self, client, userdata, msg):
-        try:
-            unpacked_data = struct.unpack('i', msg.payload)
-            print(f"HERE2 get velocity {unpacked_data[0]}")
-            self.curent_velocity_info = unpacked_data[0]
-        except struct.error as e:
-            print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
-        # if msg.topic == "current_velocity_data":
-        #     try:
-        #         unpacked_data = struct.unpack('i', msg.payload)
-        #         print(f"HERE2 get velocity {unpacked_data[0]}")
-        #         self.curent_velocity_info = unpacked_data[0]
-        #     except struct.error as e:
-        #         print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
-        # elif msg.topic == "max_velocity_data":
-        #     try:
-        #         unpacked_data = struct.unpack('i', msg.payload)
-        #         self.max_velocity_info = unpacked_data[0]
-        #     except struct.error as e:
-        #         print(f"Error unpacking message on topic max_speed_data payload: {e}")
-        # else:
-        #     print("ISSUE TEST im not even in if")
+        if msg.topic == "current_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.curent_velocity_info = unpacked_data[0]
+            except struct.error as e:
+                print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
+        elif msg.topic == "max_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.max_velocity_info = unpacked_data[0]
+            except struct.error as e:
+                print(f"Error unpacking message on topic max_speed_data payload: {e}")
+
 
 
 
@@ -175,7 +176,7 @@ class MainPublisher():
 def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
-    main_publisher.accept_connection()
+    main_publisher.start_socket()
     main_publisher.client.loop_stop()
     
 
