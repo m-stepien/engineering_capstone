@@ -25,6 +25,7 @@ class EngineDataHandler():
 
     def send_max_velocity(self):
         try:
+            print(f"HERE engine_data handler send_max_velocity {self.max_velocity_value}")
             msg = struct.pack('i', int(self.max_velocity_value))
             self.client.publish(self.max_velocity_topic, msg)
         except Exception as e:

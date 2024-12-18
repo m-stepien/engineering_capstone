@@ -103,7 +103,6 @@ class MainPublisher():
             client_thread.start()
 
     
-
     def destroy_node(self):
         if self.client_socket:
             self.client_socket.close()
@@ -136,10 +135,12 @@ class MainPublisher():
         data.append(command_type == "break")
         return data
 
+
     def get_command_type(self, command):
         command_type = command.get("type")
         return command_type
     
+
     def show_me_velocity(self):
         print(f"MAIN PUBLISHER CURRENT {self.curent_velocity_info}")
         print(f"MAIN PUBLISHER MAX {self.max_velocity_info}")

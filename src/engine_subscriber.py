@@ -43,11 +43,12 @@ class EngineSubscriber():
 
     def publish_current_velocity(self):
         try:
+            print(f"HERE engine_subscriber publish_current_velocity {self.motor.get_current_speed()}")
             current_velocity = self.motor.get_current_speed()
             msg = struct.pack('i', int(current_velocity))
             self.client.publish(self.publish_topic, msg)
         except Exception as e:
-            print(f"Issue with sending speed: {e}")
+            print(f"TEST ISSUE Issue with sending speed: {e}")
 
 
     
