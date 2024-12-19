@@ -21,7 +21,7 @@ def encrypt_message(data):
 def decrypt_message(data):
     """Odszyfrowanie wiadomości"""
     encrypted_data = base64.b64decode(data)
-    decrypted_data = unpad(encrypted_data)
+    decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
     return decrypted_data.decode('utf-8')
 
 def send_message(client_socket, command_data):

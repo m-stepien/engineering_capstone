@@ -87,7 +87,6 @@ class MainPublisher():
                 except Exception as e:
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
-                self.show_me_velocity()
             print(f"Engine turn off")
             self.publish_velocity_message([0, 0, True])
         except Exception as e:
