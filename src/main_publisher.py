@@ -14,10 +14,9 @@ key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\x
 iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
-# topic=[("current_velocity_data", 0), ("max_velocity_data", 0)]
 class MainPublisher():
 
-    def __init__(self, broker_address="localhost", topic="current_velocity_data"):
+    def __init__(self, broker_address="localhost", topic=[("current_velocity_data", 0), ("max_velocity_data", 0)]):
         self.client = mqtt.Client("MainPublisher")
         try:
             self.client.connect(broker_address)
