@@ -149,7 +149,9 @@ class MainPublisher():
                     "max_velocity": self.max_velocity_info
                 }
                 serialized_data = json.dumps(data).encode('utf-8')
-                encoded_data = base64.b64encode(serialized_data)
+                padded_data = pad(serialized_data, AES.block_size)
+                encrypted_data = cipher.encrypt(padded_data)
+                encoded_data = base64.b64encode(encrypted_data)
                 self.client_socket.send(encoded_data)
                 print(f"Sent velocity data: {data}")
             except Exception as e:

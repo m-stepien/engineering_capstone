@@ -1,5 +1,6 @@
 import base64
 import socket
+import threading
 from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
@@ -13,51 +14,53 @@ iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 # inz.local
-server_address = ('inz.local', 12345)
+server_address = ('localhost', 12345)
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 client_socket.connect(server_address)
 print(f"Connected to server at {server_address}")
 
 
-def receive_message(sock, cipher):
+def receive_messages(sock, cipher):
+    """
+    Function to continuously receive messages from the server.
+    """
     try:
-        encrypted_data = sock.recv(1024)
-        if not encrypted_data:
-            return None
-        
-        decoded_data = base64.b64decode(encrypted_data)
-        
-        decrypted_data = unpad(cipher.decrypt(decoded_data), AES.block_size)
-        
-        message = decrypted_data.decode('utf-8')
-        return message
+        while True:
+            encrypted_data = sock.recv(1024)
+            decoded_data = base64.b64decode(encrypted_data)
+            decrypted_data = unpad(cipher.decrypt(decoded_data), AES.block_size)
+            message = decrypted_data.decode('utf-8')
+            print(f"\n[Server]: {message}")
     except Exception as e:
-        print(f"Error receiving message: {e}")
-        return None
+        print(f"Error in receiving messages: {e}")
+    finally:
+        sock.close()
 
 
-try:
-    while True:
-        command = input("Enter command to send to the server: ")
+def send_messages(sock, cipher):
+    try:
+        while True:
+            command = input("Enter command to send to the server: ")
+            if command.lower() == 'disconnect':
+                print("Disconnecting from server...")
+                break
 
-        ciphered_data = cipher.encrypt(pad(command.encode('utf-8'), AES.block_size))
-        client_socket.send(ciphered_data)
-        print(f"Sent command: {ciphered_data}")
+            ciphered_data = cipher.encrypt(pad(command.encode('utf-8'), AES.block_size))
+            sock.send(ciphered_data)
+    except Exception as e:
+        print(f"Error in sending messages: {e}")
+    finally:
+        sock.close()
 
-        if command.lower() == 'disconnect':
-            break
 
-        response = receive_message(client_socket, cipher)
-        if response is not None:
-            print(f"Received response: {response}")
-        else:
-            print("No response received or connection closed.")
+receive_thread = threading.Thread(target=receive_messages, args=(client_socket, cipher))
+send_thread = threading.Thread(target=send_messages, args=(client_socket, cipher))
 
-except Exception as e:
-    print(f"An error occurred: {e}")
+receive_thread.start()
+send_thread.start()
 
-finally:
-    client_socket.close()
-    print("Client socket closed.")
+send_thread.join()
+receive_thread.join()
+
+print("Client socket closed.")
