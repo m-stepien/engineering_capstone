@@ -1,8 +1,8 @@
 import subprocess
 import os
 import sys
-
-nodes = ["engine_subscriber.py", "engine_data_handler.py", "servo_subscriber.py", "servo_data_handler.py", "main_publisher.py", "camera.py"]
+#delete mock after when writting frontend comunication of current speed end
+nodes = ["engine_subscriber.py", "engine_data_handler.py", "servo_subscriber.py", "servo_data_handler.py", "main_publisher.py", "camera.py", "engine_subscriber_mock.py"]
 path = ""
 processes = []
 for node in nodes:

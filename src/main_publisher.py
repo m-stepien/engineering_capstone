@@ -64,7 +64,6 @@ class MainPublisher():
                                     self.publish_turn_message(angle)
                                     enginee_data = self.parse_velocity(json_data)
                                     self.publish_velocity_message(enginee_data)
-                                    self.client_socket.send("ok".encode('utf-8'))
                                 except Exception as e:
                                     print(f"something wrong with received message: {e}")
                                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
