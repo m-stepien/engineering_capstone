@@ -4,7 +4,7 @@ import paho.mqtt.client as mqtt
 
 def send_velocity():
     broker_address = "localhost" 
-    topic = "max_velocity_data"
+    topic = "max_speed_data"
     
     client = mqtt.Client()
     client.connect(broker_address)

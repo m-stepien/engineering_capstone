@@ -56,7 +56,7 @@ def client_communication():
     command_data = {
         "type": "move",
         "angle": {"degree": 45.0},
-        "force": 0.8,
+        "force": 1.5,
         "position": {"x": 0.0, "y": 0.5}
     }
 

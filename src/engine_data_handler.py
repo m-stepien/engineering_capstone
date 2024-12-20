@@ -16,6 +16,7 @@ class EngineDataHandler():
         self.max_velocity_value = 100
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
+        self.max_velocity_topic = max_velocity_topic
         print("Init successful engine_data_handler")
 
     def start(self):
@@ -36,6 +37,7 @@ class EngineDataHandler():
         try:
             vp = self.v_map(v)
             db = self.d_map(d)
+            print(f"Send speed v {v} mapped to {vp} with max_velocity {self.max_velocity_value}")
             msg = struct.pack('i??', int(vp), db, break_command)
             self.client.publish(self.publish_topic, msg)
         except Exception as e:
