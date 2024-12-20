@@ -9,7 +9,6 @@ class EngineDataHandler():
             self.client.connect(broker_address)
         except Exception as e:
             print(f"Error connecting to broker at {broker_address}: {e}")
-
         self.topic = topic
         self.publish_topic = publish_topic
         self.max_velocity_value = 100
@@ -40,7 +39,7 @@ class EngineDataHandler():
             print(f"Error in v_map: {e}")
 
     def d_map(self, d):
-        return d >= 0
+        return d >= 45
 
     def listener_callback(self, client, userdata, msg):
         print("listener callback engine_data_handler")
