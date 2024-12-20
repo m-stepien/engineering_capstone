@@ -68,6 +68,7 @@ class MainPublisher():
                             elif command_type == "stop":
                                 self.publish_velocity_message([0, 0, False])
                             elif command_type == "break":
+                                print("send becouse of break")
                                 self.publish_velocity_message([0, 0, True])
                             else:
                                 print(f"There is no cuch command as {command_type}")
@@ -77,7 +78,8 @@ class MainPublisher():
                         client_socket.close()
                         client_socket = None
                         break
-                except socket.timeout:
+                except socket.timeout as e:
+                    print(f"sending due an excpetion {e}")
                     self.publish_velocity_message([0, 0, True])
                 except Exception as e:
                     print(f"Error receiving command: {e}")
