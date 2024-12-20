@@ -40,7 +40,7 @@ class MainPublisher():
 
     def start_socket(self, client_socket):
         try:
-            client_socket.settimeout(3)
+            client_socket.settimeout(10)
             while client_socket:
                 try:
                     data = client_socket.recv(2048)
@@ -65,7 +65,7 @@ class MainPublisher():
                                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
                             elif command_type == "hold":
                                 continue
-                            elif command_type == "stop":
+                            elif command_type == "stop":    
                                 self.publish_velocity_message([0, 0, False])
                             elif command_type == "break":
                                 print("send becouse of break")
