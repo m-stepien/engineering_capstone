@@ -37,7 +37,7 @@ class EngineDataHandler():
             return vp
         except Exception as e:
             print(f"Error in v_map: {e}")
-
+    #0
     def d_map(self, d):
         return d >= 45
 
