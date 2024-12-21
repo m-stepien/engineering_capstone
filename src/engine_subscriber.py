@@ -25,7 +25,13 @@ class EngineSubscriber():
             print(f"Issue with unpacking struct: {e}")
             return 0
         v = unpacked_data[0]
-        d = unpacked_data[1]
+        if v == 0:
+            if self.motor.get_current_direction()==1 or self.motor.get_current_direction()==0:
+                d=True
+            else:
+                d=False
+        else:
+            d = unpacked_data[1]        
         is_break_command = unpacked_data[2]
         if is_break_command:
             self.motor.stop()
