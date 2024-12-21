@@ -12,7 +12,6 @@ salt = b'\xda\x02\xd9A\xcd\x19\xd9U]x\xe10\xc1\xb5\x92\xbd\x0e\x8eA\x89\xafM\xf9
 password = "veryStrongPassword"
 key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\xdaxm\x1d\x9f\x84Z\xe8\xf6#'
 iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
-
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 class MainPublisher():
 
@@ -41,10 +40,9 @@ class MainPublisher():
 
         
 
-
     def start_socket(self, client_socket):
         try:
-            client_socket.settimeout(3)
+            client_socket.settimeout(10)
             while client_socket:
                 try:
                     data = client_socket.recv(2048)
@@ -68,9 +66,10 @@ class MainPublisher():
                                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
                             elif command_type == "hold":
                                 continue
-                            elif command_type == "stop":
-                                self.publish_velocity_message([0, 0, False])
+                            elif command_type == "stop":    
+                                self.publish_velocity_message([0, 45, False])
                             elif command_type == "break":
+                                print("send becouse of break")
                                 self.publish_velocity_message([0, 0, True])
                             else:
                                 print(f"There is no such command as {command_type}")
@@ -80,7 +79,8 @@ class MainPublisher():
                         client_socket.close()
                         client_socket = None
                         break
-                except socket.timeout:
+                except socket.timeout as e:
+                    print(f"sending due an excpetion {e}")
                     self.publish_velocity_message([0, 0, True])
                 except Exception as e:
                     print(f"Error receiving command: {e}")
@@ -171,7 +171,6 @@ class MainPublisher():
                 self.send_velocity_data()
             except struct.error as e:
                 print(f"Error unpacking message on topic max_speed_data payload: {e}")
-
 
 
 

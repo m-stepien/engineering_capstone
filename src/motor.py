@@ -17,26 +17,27 @@ class Motor():
         self.running = True
         self.current_work = threading.Thread(target=self.speed_modifier, daemon=True)
         self.current_work.start()
-        self.before = 0
-        
-
+        self.current_direction = 0
+    
 
     def move_forward(self,speed):
-        if self.before==-1:
+        if self.current_direction==-1:
+            print("WSZEDLEM DO INSTANCE STOP Z MOVE_FORWARD")
             self.stop()
         GPIO.output(16, False)
         GPIO.output(18, True)
         self.target_speed = speed
-        self.before = 1
+        self.current_direction = 1
 
 
     def move_backward(self,speed):
-        if self.before==1:
+        if self.current_direction==1:
+            print("WSZEDLEM DO INSTANCE STOP Z MOVE_BACKWARD")
             self.stop()
         GPIO.output(16, True)
         GPIO.output(18, False)
         self.target_speed = speed
-        self.before=-1
+        self.current_direction=-1
     
 
     def speed_modifier(self):
@@ -58,7 +59,11 @@ class Motor():
         GPIO.output(18, False)
         self.immediate_change = True
         self.target_speed = 0
-        self.before = 0
+        self.current_direction = 0
+
+
+    def get_current_direction(self):
+        return self.current_direction
 
 
     def get_current_speed(self):
