@@ -24,6 +24,7 @@ class MainPublisher():
             print(f"Issue with connection to broker: {e}")
         self.topic_publish_enginee = 'controller_enginee_data'
         self.topic_publish_servo = 'controller_turn_data'
+        self.topic_ip = "client_ip_data"
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
