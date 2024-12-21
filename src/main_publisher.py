@@ -12,7 +12,6 @@ salt = b'\xda\x02\xd9A\xcd\x19\xd9U]x\xe10\xc1\xb5\x92\xbd\x0e\x8eA\x89\xafM\xf9
 password = "veryStrongPassword"
 key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\xdaxm\x1d\x9f\x84Z\xe8\xf6#'
 iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
-
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 class MainPublisher():
@@ -35,7 +34,6 @@ class MainPublisher():
             self.accept_connection()
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
-
 
 
     def start_socket(self, client_socket):
@@ -99,7 +97,6 @@ class MainPublisher():
             client_thread.start()
 
     
-
     def destroy_node(self):
         if self.client_socket:
             self.client_socket.close()
@@ -132,10 +129,10 @@ class MainPublisher():
         data.append(command_type == "break")
         return data
 
+
     def get_command_type(self, command):
         command_type = command.get("type")
         return command_type
-
 
 
 def main(args=None):

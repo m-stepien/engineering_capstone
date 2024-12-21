@@ -11,7 +11,6 @@ class EngineSubscriber():
             self.client.connect(broker_address)
         except Exception as e:
             print(f"Problem with connection to broker: {e}")
-
         self.topic = topic
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
@@ -21,22 +20,21 @@ class EngineSubscriber():
     
     def listener_callback(self, client, userdata, msg):
         try:
-            unpacked_data = struct.unpack('i???', msg.payload)
+            unpacked_data = struct.unpack('i??', msg.payload)
         except Exception as e:
             print(f"Issue with unpacking struct: {e}")
             return 0
         v = unpacked_data[0]
         d = unpacked_data[1]
         is_break_command = unpacked_data[2]
-        ich = unpacked_data[3]
         if is_break_command:
             self.motor.stop()
         else:
             if d:
-                self.motor.move_forward(v, ich)
+                self.motor.move_forward(v)
                 print(f'Moving forward with velocity: {v}')
             else:
-                self.motor.move_backward(v, ich)    
+                self.motor.move_backward(v)    
                 print(f'Moving backward with velocity: {v}')
 
     

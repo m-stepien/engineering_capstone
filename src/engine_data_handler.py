@@ -24,8 +24,7 @@ class EngineDataHandler():
         try:
             vp = self.v_map(v)
             db = self.d_map(d)
-            is_y0 = self.p0_check(d)
-            msg = struct.pack('i???', int(vp), db, break_command, is_y0)
+            msg = struct.pack('i??', int(vp), db, break_command)
             self.client.publish(self.publish_topic, msg)
         except Exception as e:
             print(f"Issue with sending speed: {e}")
@@ -38,12 +37,12 @@ class EngineDataHandler():
             return vp
         except Exception as e:
             print(f"Error in v_map: {e}")
+
+            
     #0
     def d_map(self, d):
         return d >= 45
-    
-    def p0_check(self, d):
-        return d==45
+
 
     def listener_callback(self, client, userdata, msg):
         print("listener callback engine_data_handler")
