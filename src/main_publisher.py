@@ -66,7 +66,7 @@ class MainPublisher():
                             elif command_type == "hold":
                                 continue
                             elif command_type == "stop":    
-                                self.publish_velocity_message([0, 0, False])
+                                self.publish_velocity_message([0, 45, False])
                             elif command_type == "break":
                                 print("send becouse of break")
                                 self.publish_velocity_message([0, 0, True])
