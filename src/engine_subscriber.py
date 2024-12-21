@@ -27,8 +27,8 @@ class EngineSubscriber():
             return 0
         v = unpacked_data[0]
         d = unpacked_data[1]
-        ich = unpacked_data[2]
         is_break_command = unpacked_data[2]
+        ich = unpacked_data[3]
         if is_break_command:
             self.motor.stop()
         else:
