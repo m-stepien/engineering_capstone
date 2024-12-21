@@ -39,14 +39,7 @@ class AiService():
         print(f'Sending max speed data: {data}')
 
     def evaluate_image(self, buffer):
-        self.i+=1
-        if self.i % 3 == 0:
-            return 80
-        elif self.i % 3 == 1:
-            return 70
-        else:
-            return 100
-#        return 80
+        return None
     
     def start(self):
         print(f"Subscribing to topic: {self.topic}")
