@@ -21,8 +21,9 @@ class Motor():
         
 
 
-    def move_forward(self,speed):
-        if self.before==-1:
+    def move_forward(self,speed, ich):
+        if self.before==-1 and not ich:
+            print("WSZEDLEM DO INSTANCE STOP Z MOVE_FORWARD")
             self.stop()
         GPIO.output(16, False)
         GPIO.output(18, True)

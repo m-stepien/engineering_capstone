@@ -33,7 +33,7 @@ class EngineSubscriber():
             self.motor.stop()
         else:
             if d:
-                self.motor.move_forward(v)
+                self.motor.move_forward(v, ich)
                 print(f'Moving forward with velocity: {v}')
             else:
                 self.motor.move_backward(v, ich)    
