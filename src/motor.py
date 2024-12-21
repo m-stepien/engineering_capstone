@@ -30,8 +30,8 @@ class Motor():
         self.before = 1
 
 
-    def move_backward(self,speed):
-        if self.before==1:
+    def move_backward(self,speed, ich):
+        if self.before==1 and not ich:
             self.stop()
         GPIO.output(16, True)
         GPIO.output(18, False)
