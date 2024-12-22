@@ -74,12 +74,8 @@ class Camera():
 
     def wait_for_client_ip(self):
         print("Camera waiting for client IP...")
-        i = 0
         while self.client_ip is None:
             time.sleep(0.1) 
-            print(f"Still waiting...{i}\t {self.client_ip}")
-            i+=1
-        print(f"outsite while with {self.client_ip}, {i}")
 
 def main():
     camera = Camera(broker_address="localhost", frame_to_send_number=160)
