@@ -25,8 +25,8 @@ class Camera():
         self.topic_publish_camera = 'camera_data'
         self.client_ip = None
         self.topic = topic
-        self.client.subscribe(self.topic, qos=2)
         self.client.on_message = self.listener_callback
+        self.client.subscribe(self.topic, qos=2)
         if not self.cap.isOpened():
             print("Error: Camera not initialized!")
             self.cap.release()
@@ -38,6 +38,7 @@ class Camera():
     def start_camera(self):
         try:
             self.wait_for_client_ip()
+            print(f"outsite wait with {self.client_ip}")
             last_frame_time = time.perf_counter()
             while True:
                 ret, frame = self.cap.read()
@@ -75,6 +76,7 @@ class Camera():
         print("Camera waiting for client IP...")
         while self.client_ip is None:
             time.sleep(0.5) 
+            print("Still waiting...")
 
 def main():
     camera = Camera(broker_address="localhost", frame_to_send_number=160)
