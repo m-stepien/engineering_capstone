@@ -1,4 +1,5 @@
 import subprocess
+import time
 nodes = ["engine_subscriber.py", "engine_data_handler.py", "servo_subscriber.py", "servo_data_handler.py", "ai_service.py", "main_publisher.py", "camera.py"]
 
 path = "/capstone/src/"
@@ -9,3 +10,9 @@ for node in nodes:
 
 for process in processes:
     process.wait()
+try:
+    while True:
+        time.sleep(10)
+except KeyboardInterrupt:
+    for process in processes:
+        process.terminate()
