@@ -68,7 +68,7 @@ class Camera():
 
     def listener_callback(self, client, userdata, msg):
         self.client_ip = msg.payload.decode()
-        print(f"Received client ip {self.client_ip}")
+        print(f"Camera received client ip {self.client_ip}")
 
 
     def wait_for_client_ip(self):
