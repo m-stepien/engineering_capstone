@@ -74,7 +74,7 @@ class Camera():
     def wait_for_client_ip(self):
         print("Camera waiting for client IP...")
         while self.client_ip is None:
-            time.sleep(0.1) 
+            time.sleep(0.5) 
 
 def main():
     camera = Camera(broker_address="localhost", frame_to_send_number=160)
