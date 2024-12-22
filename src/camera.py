@@ -4,9 +4,9 @@ import pickle
 import struct
 import time
 import paho.mqtt.client as mqtt
-
+# '192.168.0.124'
 class Camera():
-    def __init__(self, broker_address="localhost", frame_to_send_number=160):
+    def __init__(self, broker_address="localhost", topic="client_ip_data", frame_to_send_number=160):
         self.client = mqtt.Client("Camera")
         self.frame_counter = 0
         self.frame_to_send_number = frame_to_send_number
@@ -23,6 +23,10 @@ class Camera():
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.frame_duration = 1 / self.fps
         self.topic_publish_camera = 'camera_data'
+        self.client_ip = None
+        self.topic = topic
+        self.client.subscribe(self.topic, qos=2)
+        self.client.on_message = self.listener_callback
         if not self.cap.isOpened():
             print("Error: Camera not initialized!")
             self.cap.release()
@@ -30,15 +34,17 @@ class Camera():
             exit()
         print(f"Init succesuful camera")
 
+
     def start_camera(self):
         try:
+            self.wait_for_client_ip()
             last_frame_time = time.perf_counter()
             while True:
                 ret, frame = self.cap.read()
                 if not ret:
                     break
                 _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
-                self.server_socket.sendto(buffer, ('192.168.0.124', self.port))
+                self.server_socket.sendto(buffer, (self.client_ip, self.port))
                 elapsed_time = time.perf_counter() - last_frame_time
                 if elapsed_time < self.frame_duration:
                     time.sleep(self.frame_duration - elapsed_time)
@@ -47,7 +53,6 @@ class Camera():
                     self.publish_camera_message(buffer)
                     self.frame_counter = 0
                 last_frame_time = time.perf_counter()
-        
         except Exception as e:
             print(f"Error: {e}")
         finally:
@@ -59,6 +64,17 @@ class Camera():
     def publish_camera_message(self, data):
         self.client.publish(self.topic_publish_camera, data.tobytes()) 
         print('Sending camera frame: "%s"' % data)
+    
+
+    def listener_callback(self, client, userdata, msg):
+        self.client_ip = msg.payload.decode()
+        print(f"Received client ip {self.client_ip}")
+
+
+    def wait_for_client_ip(self):
+        print("Camera waiting for client IP...")
+        while self.client_ip is None:
+            time.sleep(0.1) 
 
 def main():
     camera = Camera(broker_address="localhost", frame_to_send_number=160)

@@ -24,7 +24,7 @@ class MainPublisher():
             print(f"Issue with connection to broker: {e}")
         self.topic_publish_enginee = 'controller_enginee_data'
         self.topic_publish_servo = 'controller_turn_data'
-        self.topic_ip = "client_ip_data"
+        self.public_ip_topic = "client_ip_data"
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -39,6 +39,7 @@ class MainPublisher():
 
     def start_socket(self, client_socket):
         try:
+            self.public_ip_topic(client_socket)
             client_socket.settimeout(10)
             while client_socket:
                 try:
@@ -116,6 +117,20 @@ class MainPublisher():
         msg = struct.pack('f', float(angle_degree))
         self.client.publish(self.topic_publish_servo, msg)
         print('Sending turn engine data: "%s"' % angle_degree)
+
+
+    def publish_client_ip(self, client_ip):
+        success = False
+        i = 0
+        while not success:
+            result = self.client.publish(self.public_ip_topic, client_ip, qos=2)
+            if result.rc == mqtt.MQTT_ERR_SUCCESS:
+                success = True
+                print(f"Success to publish client ip")
+            else:
+                success = False
+                i+=1
+                print(f"Failed to publish client ip in {i} try")
 
 
     def parse_degree(self, json_data):
