@@ -39,7 +39,7 @@ class MainPublisher():
 
     def start_socket(self, client_socket):
         try:
-            self.publish_client_ip(client_socket)
+            self.publish_client_ip()
             client_socket.settimeout(10)
             while client_socket:
                 try:
@@ -119,11 +119,11 @@ class MainPublisher():
         print('Sending turn engine data: "%s"' % angle_degree)
 
 
-    def publish_client_ip(self, client_ip):
+    def publish_client_ip(self):
         success = False
         i = 0
         while not success:
-            result = self.client.publish(self.public_ip_topic, client_ip, qos=2)
+            result = self.client.publish(self.public_ip_topic, self.client_ip, qos=2)
             if result.rc == mqtt.MQTT_ERR_SUCCESS:
                 success = True
                 print(f"Success to publish client ip")
