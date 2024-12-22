@@ -95,7 +95,7 @@ class MainPublisher():
             client_socket, addr = self.server_socket.accept()
             print(f"Connection established with {addr}")
             self.client_socket = client_socket
-            client_thread = threading.Thread(target=self.start_socket, args=(client_socket, addr,))
+            client_thread = threading.Thread(target=self.start_socket, args=(client_socket, addr[0],))
             client_thread.start()
 
     
