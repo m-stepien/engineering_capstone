@@ -77,7 +77,7 @@ class Camera():
         i = 0
         while self.client_ip is None:
             time.sleep(0.1) 
-            print(f"Still waiting...{i}")
+            print(f"Still waiting...{i}\t {self.client_ip}")
             i+=1
         print(f"outsite while with {self.client_ip}, {i}")
 
