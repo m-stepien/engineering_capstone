@@ -122,17 +122,15 @@ class MainPublisher():
     def publish_client_ip(self, client_ip):
         success = False
         i = 0
-        # while not success:
-        print("before send ip")
-        self.client.publish(self.public_ip_topic, client_ip)
-        print("end")
-            # if result.rc == mqtt.MQTT_ERR_SUCCESS:
-            #     success = True
-            #     print(f"Success to publish client ip")
-            # else:
-            #     success = False
-            #     i+=1
-            #     print(f"Failed to publish client ip in {i} try")
+        while not success:    
+            result = self.client.publish(self.public_ip_topic, client_ip)
+            if result.rc == mqtt.MQTT_ERR_SUCCESS:
+                success = True
+                print(f"Success to publish client ip")
+            else:
+                success = False
+                i+=1
+                print(f"Failed to publish client ip in {i} try")
 
 
     def parse_degree(self, json_data):
