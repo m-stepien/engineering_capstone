@@ -123,7 +123,7 @@ class MainPublisher():
         success = False
         i = 0
         while not success:
-            result = self.client.publish(self.public_ip_topic, client_ip, qos=2)
+            result = self.client.publish(self.public_ip_topic, client_ip, qos=2, retain=True)
             if result.rc == mqtt.MQTT_ERR_SUCCESS:
                 success = True
                 print(f"Success to publish client ip")
