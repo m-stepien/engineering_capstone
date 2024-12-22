@@ -14,7 +14,7 @@ iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
 
 # inz.local
-server_address = ('localhost', 12345)
+server_address = ('inz.local', 12345)
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(server_address)
