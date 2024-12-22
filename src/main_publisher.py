@@ -39,7 +39,7 @@ class MainPublisher():
 
     def start_socket(self, client_socket):
         try:
-            self.public_ip_topic(client_socket)
+            self.publish_client_ip(client_socket)
             client_socket.settimeout(10)
             while client_socket:
                 try:
