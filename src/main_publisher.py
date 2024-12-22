@@ -13,10 +13,9 @@ password = "veryStrongPassword"
 key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\xdaxm\x1d\x9f\x84Z\xe8\xf6#'
 iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
-
 class MainPublisher():
 
-    def __init__(self, broker_address="localhost"):
+    def __init__(self, broker_address="localhost", topic=[("current_velocity_data", 0), ("max_velocity_data", 0)]):
         self.client = mqtt.Client("MainPublisher")
         try:
             self.client.connect(broker_address)
@@ -31,11 +30,16 @@ class MainPublisher():
             self.server_socket.bind(('0.0.0.0', 12345))
             self.server_socket.listen(1)
             self.client_socket = None
+            self.curent_velocity_info = 0
+            self.max_velocity_info = 100
+            self.topic = topic
+            self.client.subscribe(self.topic)
+            self.client.on_message = self.listener_callback
             print("init succesfull main publisher")
-            self.accept_connection()
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
 
+        
 
     def start_socket(self, client_socket, client_ip):
         try:
@@ -59,7 +63,6 @@ class MainPublisher():
                                     self.publish_turn_message(angle)
                                     enginee_data = self.parse_velocity(json_data)
                                     self.publish_velocity_message(enginee_data)
-                                    self.client_socket.send("ok".encode('utf-8'))
                                 except Exception as e:
                                     print(f"something wrong with received message: {e}")
                                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
@@ -71,7 +74,7 @@ class MainPublisher():
                                 print("send becouse of break")
                                 self.publish_velocity_message([0, 0, True])
                             else:
-                                print(f"There is no cuch command as {command_type}")
+                                print(f"There is no such command as {command_type}")
                                 continue
                     else:
                         print("Client disconnected unexpectedly.")
@@ -149,13 +152,51 @@ class MainPublisher():
     def get_command_type(self, command):
         command_type = command.get("type")
         return command_type
+    
+
+    def send_velocity_data(self):
+        if self.client_socket:
+            try:
+                data = {
+                    "current_velocity": self.curent_velocity_info,
+                    "max_velocity": self.max_velocity_info
+                }
+                serialized_data = json.dumps(data).encode('utf-8')
+                cipher_encrypt = AES.new(key, AES.MODE_CBC, iv)
+                padded_data = pad(serialized_data, AES.block_size)
+                encrypted_data = cipher_encrypt.encrypt(padded_data)
+                encoded_data = base64.b64encode(encrypted_data)
+                self.client_socket.send(encoded_data)
+                print(f"Sent velocity data: {data}")
+            except Exception as e:
+                print(f"Error sending velocity data: {e}")
+
+
+    def listener_callback(self, client, userdata, msg):
+        if msg.topic == "current_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.curent_velocity_info = unpacked_data[0]
+                self.send_velocity_data()
+            except struct.error as e:
+                print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
+        elif msg.topic == "max_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.max_velocity_info = unpacked_data[0]
+                self.send_velocity_data()
+            except struct.error as e:
+                print(f"Error unpacking message on topic max_speed_data payload: {e}")
+
+
 
 
 def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
-    main_publisher.start_socket()
+    main_publisher.accept_connection()
     main_publisher.client.loop_stop()
+    
 
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ import struct
 
 class EngineSubscriber():
     
-    def __init__(self, broker_address='localhost', topic='enginee_velocity'):
+    def __init__(self, broker_address='localhost', topic='enginee_velocity', publish_topic="current_velocity_data"):
         self.client = mqtt.Client("EngineSubscriber")
 
         try:
@@ -13,6 +13,7 @@ class EngineSubscriber():
             print(f"Problem with connection to broker: {e}")
         self.topic = topic
         self.client.subscribe(self.topic)
+        self.publish_topic = publish_topic
         self.client.on_message = self.listener_callback
         self.motor = Motor()
         print("Init successful engine subscriber")
@@ -42,6 +43,18 @@ class EngineSubscriber():
             else:
                 self.motor.move_backward(v)    
                 print(f'Moving backward with velocity: {v}')
+        self.publish_current_velocity()
+
+
+    def publish_current_velocity(self):
+        try:
+            print(f"HERE engine_subscriber publish_current_velocity {self.motor.get_current_speed()}")
+            current_velocity = self.motor.get_current_speed()
+            msg = struct.pack('i', int(current_velocity))
+            self.client.publish(self.publish_topic, msg)
+        except Exception as e:
+            print(f"TEST ISSUE Issue with sending speed: {e}")
+
 
     
     def start(self):
