@@ -37,9 +37,9 @@ class MainPublisher():
             print(f"Issue during server socker creation: {e}")
 
 
-    def start_socket(self, client_socket):
+    def start_socket(self, client_socket, client_ip):
         try:
-            self.publish_client_ip()
+            self.publish_client_ip(client_ip)
             client_socket.settimeout(10)
             while client_socket:
                 try:
@@ -95,7 +95,7 @@ class MainPublisher():
             client_socket, addr = self.server_socket.accept()
             print(f"Connection established with {addr}")
             self.client_socket = client_socket
-            client_thread = threading.Thread(target=self.start_socket, args=(client_socket,))
+            client_thread = threading.Thread(target=self.start_socket, args=(client_socket, addr,))
             client_thread.start()
 
     
@@ -119,11 +119,11 @@ class MainPublisher():
         print('Sending turn engine data: "%s"' % angle_degree)
 
 
-    def publish_client_ip(self):
+    def publish_client_ip(self, client_ip):
         success = False
         i = 0
         while not success:
-            result = self.client.publish(self.public_ip_topic, self.client_ip, qos=2)
+            result = self.client.publish(self.public_ip_topic, client_ip, qos=2)
             if result.rc == mqtt.MQTT_ERR_SUCCESS:
                 success = True
                 print(f"Success to publish client ip")
