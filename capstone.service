@@ -4,13 +4,13 @@ After=multi-user.target
 Requires=multi-user.target
 
 [Service]
-ExecStart=/usr/bin/python3 /capstone/src/scripts/run.py
-Restart=always
+ExecStart=/usr/bin/python3 /home/bilbo/capstone/src/scripts/run.py
+Restart=on-failure
 User=bilbo
 Group=bilbo
-WorkingDirectory=/capstone/src/scripts
+WorkingDirectory=/home/bilbo/capstone/src/scripts
 StandardOutput=null
-StandardError=append:/capstone/logs/error.log
+StandardError=append:/home/bilbo/capstone/logs/error.log
 
 [Install]
 WantedBy=multi-user.target
