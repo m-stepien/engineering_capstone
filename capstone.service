@@ -1,0 +1,16 @@
+[Unit]
+Description=Capstone Car Application
+After=multi-user.target
+Requires=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /capstone/src/scripts/run.py
+Restart=always
+User=bilbo
+Group=bilbo
+WorkingDirectory=/capstone/src/scripts
+StandardOutput=null
+StandardError=append:/capstone/logs/error.log
+
+[Install]
+WantedBy=multi-user.target
