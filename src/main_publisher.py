@@ -124,7 +124,7 @@ class MainPublisher():
         i = 0
         # while not success:
         print("before send ip")
-        self.client.publish(self.public_ip_topic, client_ip, qos=2, retain=True)
+        self.client.publish(self.public_ip_topic, client_ip)
         print("end")
             # if result.rc == mqtt.MQTT_ERR_SUCCESS:
             #     success = True
