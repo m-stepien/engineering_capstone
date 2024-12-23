@@ -12,7 +12,7 @@ class Motor():
         self.motor_speed.start(0)
         self.current_speed = 0
         self.target_speed = 0
-        self.step_time = 0.05
+        self.step_time = 0.025 #?
         self.immediate_change = False
         self.running = True
         self.current_work = threading.Thread(target=self.speed_modifier, daemon=True)
@@ -39,30 +39,21 @@ class Motor():
     
 
     def speed_modifier(self):
-        print("speed modifier start")
         while self.running:
-            print("speed modifier alive")
             if self.immediate_change:
-                print("speed modifier on immediate change")
                 self.current_speed = 0
                 self.immediate_change = False
             else:
-                print("speed modifier in else")
                 if self.current_speed <= 50 and self.current_speed < self.target_speed and self.current_direction != 0:
-                    print("speed modifier in boost")
                     self.motor_speed.ChangeDutyCycle(100)
                     time.sleep(0.01)
-                    self.current_speed=30
+                    self.current_speed=40
                 if self.current_speed < self.target_speed:
-                    print("speed modifier in current less then target")
                     self.current_speed+=1
                 elif self.current_speed > self.target_speed:
-                    print("speed modifier in current greater then target")
                     self.current_speed-=1
-            print("speed modifier outside if tree")
             self.motor_speed.ChangeDutyCycle(self.current_speed)
             time.sleep(self.step_time)
-            print("speed modifier after everything")
         
 
     def stop(self):
