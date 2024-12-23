@@ -25,7 +25,7 @@ try:
         data = pickle.dumps(buffer)
 
         # TODO:: ip sobie zmień
-        server_socket.sendto(buffer.tobytes(), ('192.168.8.106', port))
+        server_socket.sendto(buffer.tobytes(), ('192.168.0.124', port))
 
 except Exception as e:
     print(f"Error: {e}")
