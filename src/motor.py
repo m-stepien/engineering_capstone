@@ -52,6 +52,7 @@ class Motor():
                     print("speed modifier in boost")
                     self.motor_speed.ChangeDutyCycle(100)
                     time.sleep(0.01)
+                    self.current_speed=50
                 if self.current_speed < self.target_speed:
                     print("speed modifier in current less then target")
                     self.current_speed+=1
