@@ -13,9 +13,11 @@ class EngineDataHandler():
         self.topic = topic
         self.publish_topic = publish_topic
         self.max_velocity_value = 100
+        self.min_velocity_value = 50
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
         self.max_velocity_topic = max_velocity_topic
+        
         print("Init successful engine_data_handler")
 
     def start(self):
@@ -47,6 +49,8 @@ class EngineDataHandler():
             vp = v / 1.5 * self.max_velocity_value
             if vp > self.max_velocity_value:
                 vp = self.max_velocity_value
+            elif vp < self.min_velocity_value:
+                vp = self.min_velocity_value
             return vp
         except Exception as e:
             print(f"Error in v_map: {e}")
