@@ -5,8 +5,8 @@ import numpy as np
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1)
-# server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 0)
-host_ip = 'inz.local'
+# inz.local
+host_ip = 'localhost'
 port = 12346
 
 client_socket.bind(('', port)) 
