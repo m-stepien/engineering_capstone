@@ -1,6 +1,6 @@
 import torch
 
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/weights/best.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./car_ai/model/weights/best.pt')
 
 
 def get_detected_tag(image):
