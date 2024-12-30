@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import struct
+from car_ai.predict_yolo import get_detected_tag
 
 
 class AiService():
@@ -39,7 +40,8 @@ class AiService():
         print(f'Sending max speed data: {data}')
 
     def evaluate_image(self, buffer):
-        return None
+        result = get_detected_tag(buffer)
+        return result
     
     def start(self):
         print(f"Subscribing to topic: {self.topic}")

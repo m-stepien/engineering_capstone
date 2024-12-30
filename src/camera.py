@@ -6,7 +6,7 @@ import time
 import paho.mqtt.client as mqtt
 # '192.168.0.124'
 class Camera():
-    def __init__(self, broker_address="localhost", topic="client_ip_data", frame_to_send_number=160):
+    def __init__(self, broker_address="localhost", topic="client_ip_data", frame_to_send_number=40):
         self.client = mqtt.Client("Camera")
         self.frame_counter = 0
         self.frame_to_send_number = frame_to_send_number
