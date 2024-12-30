@@ -15,5 +15,5 @@ def get_detected_tag(image):
     largest_bbox_class = results.xywh[0][max_area_index, -1].item()
     largest_bbox_tag = detected_tags[int(largest_bbox_class)]
 
-    return largest_bbox_tag
+    return largest_bbox_tag or None
 
