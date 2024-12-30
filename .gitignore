@@ -1,0 +1,4 @@
+car_ai/data/*
+car_ai/images/*
+car_ai/prevdata/*
+.venv/*
