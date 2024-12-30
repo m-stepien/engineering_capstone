@@ -1,3 +1,4 @@
+import base64
 import socket
 import json
 import threading
@@ -9,14 +10,12 @@ from Crypto.Util.Padding import pad, unpad
 
 salt = b'\xda\x02\xd9A\xcd\x19\xd9U]x\xe10\xc1\xb5\x92\xbd\x0e\x8eA\x89\xafM\xf9KDf\x96\xb0\xfa+E\xb6'
 password = "veryStrongPassword"
-key = PBKDF2(password, salt, dkLen=32)
+key = b'\xde?\xb0*/\x1d\xb0\xf5\xad\xf4\xa63\xf5\x0c\xbc\xb2)\xe1\x9b\x08n\x93\xdaxm\x1d\x9f\x84Z\xe8\xf6#'
 iv = b'\xda8^(/\x16\xd7\xd0\x94\xc4\xa8}n\x11\xee\xa1'
-
 cipher = AES.new(key, AES.MODE_CBC, iv=iv)
+class MainPublisher():
 
-class MainPublisher(): 
-
-    def __init__(self, broker_address="localhost"):
+    def __init__(self, broker_address="localhost", topic=[("current_velocity_data", 0), ("max_velocity_data", 0)]):
         self.client = mqtt.Client("MainPublisher")
         try:
             self.client.connect(broker_address)
@@ -24,58 +23,72 @@ class MainPublisher():
             print(f"Issue with connection to broker: {e}")
         self.topic_publish_enginee = 'controller_enginee_data'
         self.topic_publish_servo = 'controller_turn_data'
+        self.public_ip_topic = "client_ip_data"
         try:
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.server_socket.bind(('0.0.0.0', 12345))
             self.server_socket.listen(1)
             self.client_socket = None
-            print("init succesfull")
-            self.accept_connection()
+            self.curent_velocity_info = 0
+            self.max_velocity_info = 100
+            self.topic = topic
+            self.client.subscribe(self.topic)
+            self.client.on_message = self.listener_callback
+            print("init succesfull main publisher")
         except Exception as e:
             print(f"Issue during server socker creation: {e}")
 
+        
 
-
-    def start_socket(self, client_socket):
+    def start_socket(self, client_socket, client_ip):
         try:
-            client_socket.settimeout(3)
-
+            self.publish_client_ip(client_ip)
+            client_socket.settimeout(10)
             while client_socket:
                 try:
-                    data = client_socket.recv(1024)
+                    data = client_socket.recv(2048)
                     if data:
-                        # json_data = json.loads(data.decode('utf-8'))
-                        # print(f"Received command: {json_data}")
-
-                        decrypted_data = unpad(cipher.decrypt(data), AES.block_size)
-                        print(f"Decrypted data: {decrypted_data}")
-                        json_data = json.loads(decrypted_data.decode('utf-8'))
-                        print(f"Received command: {json_data}")
-                        angle = self.parse_degree(json_data)
-                        self.publish_turn_message(angle)
-                        enginee_data = self.parse_velocity(json_data)   
-                        self.publish_velocity_message(enginee_data)
-                        try:
-                            angle = self.parse_degree(json_data)
-                            self.publish_turn_message(angle)
-                            enginee_data = self.parse_velocity(json_data)
-                            self.publish_velocity_message(enginee_data)
-                            self.client_socket.send("ok".encode('utf-8'))
-                        except Exception as e:
-                            print(f"something wrong with received message: {e}")
-                            self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                        encrypted_data = base64.b64decode(data)
+                        decrypted_data = unpad(cipher.decrypt(encrypted_data), AES.block_size)
+                        start_index = decrypted_data.find(b'{')
+                        json_data = decrypted_data[start_index:]
+                        if start_index != -1:
+                            json_data = json.loads(json_data.decode('utf-8'))
+                            print(f"Received command: {json_data}")
+                            command_type = self.get_command_type(json_data)
+                            if command_type == "move":
+                                try:
+                                    angle = self.parse_degree(json_data)
+                                    self.publish_turn_message(angle)
+                                    enginee_data = self.parse_velocity(json_data)
+                                    self.publish_velocity_message(enginee_data)
+                                except Exception as e:
+                                    print(f"something wrong with received message: {e}")
+                                    self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+                            elif command_type == "hold":
+                                continue
+                            elif command_type == "stop":    
+                                self.publish_velocity_message([0, 45, False])
+                            elif command_type == "break":
+                                print("send becouse of break")
+                                self.publish_velocity_message([0, 0, True])
+                            else:
+                                print(f"There is no such command as {command_type}")
+                                continue
                     else:
                         print("Client disconnected unexpectedly.")
                         client_socket.close()
-                        self.client_socket = None
+                        client_socket = None
                         break
-                except socket.timeout:
-                    print(f"Brak wiadomości wyłączam silniki")
-                    self.publish_velocity_message([0, 0])
+                except socket.timeout as e:
+                    print(f"sending due an excpetion {e}")
+                    self.publish_velocity_message([0, 0, True])
                 except Exception as e:
                     print(f"Error receiving command: {e}")
                     self.client_socket.send("Something is wrong check the command".encode('utf-8'))
+            print(f"Engine turn off")
+            self.publish_velocity_message([0, 0, True])
         except Exception as e:
             print(f"Socket issue :{e}")
 
@@ -85,11 +98,10 @@ class MainPublisher():
             client_socket, addr = self.server_socket.accept()
             print(f"Connection established with {addr}")
             self.client_socket = client_socket
-            client_thread = threading.Thread(target=self.start_socket, args=(client_socket,))
+            client_thread = threading.Thread(target=self.start_socket, args=(client_socket, addr[0],))
             client_thread.start()
 
     
-
     def destroy_node(self):
         if self.client_socket:
             self.client_socket.close()
@@ -98,8 +110,9 @@ class MainPublisher():
 
 
     def publish_velocity_message(self, data):
-        msg = struct.pack('ff', float(data[0]), float(data[1]))
-        self.client.publish(self.topic_publish_enginee, msg) 
+        print("jestem w publish_velocity")
+        msg = struct.pack('ff?', float(data[0]), float(data[1]), data[2])
+        self.client.publish(self.topic_publish_enginee, msg)
         print('Sending move engine data: "%s"' % data)
 
 
@@ -107,6 +120,20 @@ class MainPublisher():
         msg = struct.pack('f', float(angle_degree))
         self.client.publish(self.topic_publish_servo, msg)
         print('Sending turn engine data: "%s"' % angle_degree)
+
+
+    def publish_client_ip(self, client_ip):
+        success = False
+        i = 0
+        while not success:    
+            result = self.client.publish(self.public_ip_topic, client_ip)
+            if result.rc == mqtt.MQTT_ERR_SUCCESS:
+                success = True
+                print(f"Success to publish client ip")
+            else:
+                success = False
+                i+=1
+                print(f"Failed to publish client ip in {i} try")
 
 
     def parse_degree(self, json_data):
@@ -117,16 +144,60 @@ class MainPublisher():
         data = []
         data.append(json_data.get("force"))
         data.append(json_data.get("position", {}).get("y"))
+        command_type = self.get_command_type(json_data)
+        data.append(command_type == "break")
         return data
 
+
+    def get_command_type(self, command):
+        command_type = command.get("type")
+        return command_type
     
-    
+
+    def send_velocity_data(self):
+        if self.client_socket:
+            try:
+                data = {
+                    "current_velocity": self.curent_velocity_info,
+                    "max_velocity": self.max_velocity_info
+                }
+                serialized_data = json.dumps(data).encode('utf-8')
+                cipher_encrypt = AES.new(key, AES.MODE_CBC, iv)
+                padded_data = pad(serialized_data, AES.block_size)
+                encrypted_data = cipher_encrypt.encrypt(padded_data)
+                encoded_data = base64.b64encode(encrypted_data)
+                self.client_socket.send(encoded_data)
+                print(f"Sent velocity data: {data}")
+            except Exception as e:
+                print(f"Error sending velocity data: {e}")
+
+
+    def listener_callback(self, client, userdata, msg):
+        if msg.topic == "current_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.curent_velocity_info = unpacked_data[0]
+                self.send_velocity_data()
+            except struct.error as e:
+                print(f"Error unpacking message on topic controller_enginee_data payload: {e}")
+        elif msg.topic == "max_velocity_data":
+            try:
+                unpacked_data = struct.unpack('i', msg.payload)
+                self.max_velocity_info = unpacked_data[0]
+                self.send_velocity_data()
+            except struct.error as e:
+                print(f"Error unpacking message on topic max_speed_data payload: {e}")
+
+
+
+
 def main(args=None):
     main_publisher = MainPublisher()
     main_publisher.client.loop_start()
-    main_publisher.start_socket()
+    main_publisher.accept_connection()
     main_publisher.client.loop_stop()
+    
+
 
 if __name__ == '__main__':
     main()
-

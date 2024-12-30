@@ -13,7 +13,7 @@ server_socket.bind((host_ip, port))
 print(f"Init succesuful")
 mock_images_path = "frames/*.jpg"  
 mock_images = [cv2.imread(img_path) for img_path in sorted(glob.glob(mock_images_path))]
-cap = cv2.VideoCapture(0, cv2.CAP_V4L2)  
+# cap = cv2.VideoCapture(0, cv2.CAP_V4L2)  
 
 try:
     while True:
