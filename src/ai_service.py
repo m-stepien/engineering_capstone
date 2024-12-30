@@ -26,6 +26,7 @@ class AiService():
             buffer = msg.payload
             result = self.evaluate_image(buffer)
             if result is not None:
+                print(f"Ai service get result {result}")
                 self.publish_max_speed_data(int(result))
         except Exception as e:
             print(f"Issue with image: {e}")

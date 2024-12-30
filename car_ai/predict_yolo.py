@@ -4,6 +4,7 @@ model = torch.hub.load('ultralytics/yolov5', 'custom', path='./model/weights/bes
 
 
 def get_detected_tag(image):
+    print("get_detected_tag executed")
     results = model(image)
 
     detected_tags = results.names
