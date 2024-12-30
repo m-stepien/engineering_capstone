@@ -5,7 +5,7 @@ import pickle
 import numpy as np  
 import time
 
-output_folder = "./dataset/90"
+output_folder = "./dataset/100"
 os.makedirs(output_folder, exist_ok=True)
 
 
@@ -15,7 +15,7 @@ def client_communication():
     host_ip = 'inz.local' 
     port = 12345    
     port2 = 12346
-    i = 0
+    i = 11
 
     client_socket2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket2.connect((host, port))
