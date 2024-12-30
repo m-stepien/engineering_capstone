@@ -1,0 +1,555 @@
+Init successful engine subscriber
+Subscribing to topic: enginee_velocity
+Init successful sevo data handler
+Subscribing to topic: controller_turn_data
+Init successful engine_data_handler
+Subscribing to topic: [('controller_enginee_data', 0), ('max_speed_data', 0)]
+Init successful servo subscriber
+Subscribing to topic: servo_angle
+init succesfull main publisher
+Init succesuful camera
+Sending camera frame: "[255 216 255 ...  35 255 217]"
+Sending camera frame: "[255 216 255 ... 159 255 217]"
+Connection established with ('192.168.0.124', 35303)
+Sending camera frame: "[255 216 255 ... 147 255 217]"
+Sending camera frame: "[255 216 255 ...  39 255 217]"
+sending due an excpetion timed out
+jestem w publish_velocity
+Sending move engine data: "[0, 0, True]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (0.0, 0.0, True)
+Sending camera frame: "[255 216 255 ... 127 255 217]"
+Sending camera frame: "[255 216 255 ...  71 255 217]"
+Client disconnected unexpectedly.
+Engine turn off
+jestem w publish_velocity
+Sending move engine data: "[0, 0, True]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (0.0, 0.0, True)
+Sending camera frame: "[255 216 255 ... 159 255 217]"
+Connection established with ('192.168.0.124', 45131)
+Connection established with ('192.168.0.124', 36487)
+Sending camera frame: "[255 216 255 ... 136 255 217]"
+Received command: {'position': {'x': 48.81491597493489, 'y': 119.17261250813802}, 'angle': {'radian': 1.6393168783261487, 'degree': 93.92593841264942}, 'force': 1.2373901624099894, 'type': 'move'}
+Sending turn engine data: "93.92593841264942"
+jestem w publish_velocity
+Sending move engine data: "[1.2373901624099894, 119.17261250813802, False]"
+Received: 93.92594146728516
+listener callback engine_data_handler
+eeeeee in if
+Map to: 1
+get topic controller_enginee_data
+Received: (1.237390160560608, 119.17261505126953, False)
+Moving forward with velocity: 82
+ServoSubscrivber
+Received: 1
+Received command: {'position': {'x': 51.97884170926841, 'y': 133.32186596420698}, 'angle': {'radian': 1.587728281124149, 'degree': 90.97012952197443}, 'force': 1.8415934571169472, 'type': 'move'}
+Sending turn engine data: "90.97012952197443"
+jestem w publish_velocity
+Received: 90.97013092041016
+Map to: 0
+Sending move engine data: "[1.8415934571169472, 133.32186596420698, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (1.8415935039520264, 133.32186889648438, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Error receiving command: 'utf-8' codec can't decode byte 0xcd in position 4: invalid continuation byte
+Received command: {'position': {'x': 52.643245738520534, 'y': 133.33035689741033}, 'angle': {'radian': 1.5794225287108938, 'degree': 90.49424496301431}, 'force': 2.373783786594287, 'type': 'move'}
+Sending turn engine data: "90.49424496301431"
+jestem w publish_velocity
+Received: 90.49424743652344
+Map to: 0
+Sending move engine data: "[2.373783786594287, 133.33035689741033, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.373783826828003, 133.33035278320312, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 53.015224724709, 'y': 133.3327008740403}, 'angle': {'radian': 1.5747726948814185, 'degree': 90.22782910914822}, 'force': 2.457661031194479, 'type': 'move'}
+Sending turn engine data: "90.22782910914822"
+jestem w publish_velocity
+Received: 90.22782897949219
+Sending move engine data: "[2.457661031194479, 133.3327008740403, False]"
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.4576609134674072, 133.33270263671875, False)
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Received command: {'position': {'x': 53.017970369613366, 'y': 133.3327117446755}, 'angle': {'radian': 1.5747383740511176, 'degree': 90.22586267042259}, 'force': 2.4790581680279047, 'type': 'move'}
+Sending turn engine data: "90.22586267042259"
+jestem w publish_velocity
+Sending move engine data: "[2.4790581680279047, 133.3327117446755, False]"
+Received: 90.22586059570312
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.479058265686035, 133.3327178955078, False)
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Received command: {'position': {'x': 52.68101431855416, 'y': 133.33067378851948}, 'angle': {'radian': 1.5789504048387364, 'degree': 90.46719425773232}, 'force': 2.5112233535780226, 'type': 'move'}
+Sending turn engine data: "90.46719425773232"
+jestem w publish_velocity
+Sending move engine data: "[2.5112233535780226, 133.33067378851948, False]"
+Received: 90.46719360351562
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+ServoSubscrivber
+Received: (2.511223316192627, 133.33067321777344, False)
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 52.34845769715197, 'y': 133.32727072849633}, 'angle': {'radian': 1.5831075832415802, 'degree': 90.70538303489819}, 'force': 2.532728824797859, 'type': 'move'}
+Sending turn engine data: "90.70538303489819"
+jestem w publish_velocity
+Sending move engine data: "[2.532728824797859, 133.32727072849633, False]"
+Received: 90.70538330078125
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.532728910446167, 133.3272705078125, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.97500340138187, 'y': 133.32180087582327}, 'angle': {'radian': 1.5877762668706208, 'degree': 90.97287890272405}, 'force': 2.5543024099576046, 'type': 'move'}
+Sending turn engine data: "90.97287890272405"
+jestem w publish_velocity
+Sending move engine data: "[2.5543024099576046, 133.32180087582327, False]"
+Received: 90.9728775024414
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.554302453994751, 133.32180786132812, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.72751032729549, 'y': 133.31721503754474}, 'angle': {'radian': 1.5908704625587204, 'degree': 91.15016325663973}, 'force': 2.620380112179055, 'type': 'move'}
+Sending turn engine data: "91.15016325663973"
+jestem w publish_velocity
+Sending move engine data: "[2.620380112179055, 133.31721503754474, False]"
+Received: 91.15016174316406
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.620380163192749, 133.3172149658203, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.39185083745758, 'y': 133.30977139929254}, 'angle': {'radian': 1.5950672408304478, 'degree': 91.39062093916192}, 'force': 2.6403110598154234, 'type': 'move'}
+Sending turn engine data: "91.39062093916192"
+jestem w publish_velocity
+Received: 91.39061737060547
+Sending move engine data: "[2.6403110598154234, 133.30977139929254, False]"
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.6403110027313232, 133.3097686767578, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.44661597487911, 'y': 133.31108209890755}, 'angle': {'radian': 1.5943824805704456, 'degree': 91.35138706628551}, 'force': 2.684560161280985, 'type': 'move'}
+Sending turn engine data: "91.35138706628551"
+jestem w publish_velocity
+Sending move engine data: "[2.684560161280985, 133.31108209890755, False]"
+Received: 91.35138702392578
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.6845600605010986, 133.3110809326172, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Error receiving command: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Received command: {'position': {'x': 50.80451405287474, 'y': 133.2933550507315}, 'angle': {'radian': 1.6024118343665021, 'degree': 91.8114351510169}, 'force': 2.726495163524412, 'type': 'move'}
+Sending turn engine data: "91.8114351510169"
+jestem w publish_velocity
+Sending move engine data: "[2.726495163524412, 133.2933550507315, False]"
+Received: 91.81143188476562
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.7264952659606934, 133.29335021972656, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 50.87635805759828, 'y': 133.2955948852331}, 'angle': {'radian': 1.601513347946453, 'degree': 91.75995567119826}, 'force': 2.758524314238356, 'type': 'move'}
+Sending turn engine data: "91.75995567119826"
+jestem w publish_velocity
+Sending move engine data: "[2.758524314238356, 133.2955948852331, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: 91.75995635986328
+Received: (2.7585244178771973, 133.29559326171875, False)
+Map to: 0
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Received command: {'position': {'x': 50.885850600516065, 'y': 133.29588599564246}, 'angle': {'radian': 1.601394635375758, 'degree': 91.75315394192229}, 'force': 2.7692232295326624, 'type': 'move'}
+Sending turn engine data: "91.75315394192229"
+jestem w publish_velocity
+Sending move engine data: "[2.7692232295326624, 133.29588599564246, False]"
+Received: 91.7531509399414
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.769223213195801, 133.29588317871094, False)
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Received command: {'position': {'x': 50.89526985986288, 'y': 133.29617374373478}, 'angle': {'radian': 1.6012768397067283, 'degree': 91.74640474724197}, 'force': 2.7799218975829363, 'type': 'move'}
+Sending turn engine data: "91.74640474724197"
+jestem w publish_velocity
+Sending move engine data: "[2.7799218975829363, 133.29617374373478, False]"
+Received: 91.74640655517578
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.7799220085144043, 133.29617309570312, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 50.91388399118166, 'y': 133.29673911923496}, 'angle': {'radian': 1.6010440557619106, 'degree': 91.7330672096655}, 'force': 2.801309339078847, 'type': 'move'}
+Sending turn engine data: "91.7330672096655"
+jestem w publish_velocity
+Sending move engine data: "[2.801309339078847, 133.29673911923496, False]"
+listener callback engine_data_handler
+Received: 91.73307037353516
+eeeeee in if
+Map to: 0
+get topic controller_enginee_data
+Received: (2.80130934715271, 133.29673767089844, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 50.92308038937081, 'y': 133.29701684495078}, 'angle': {'radian': 1.6009290483767402, 'degree': 91.72647777188241}, 'force': 2.8119978256120404, 'type': 'move'}
+Sending turn engine data: "91.72647777188241"
+jestem w publish_velocity
+Sending move engine data: "[2.8119978256120404, 133.29701684495078, False]"
+Received: 91.72647857666016
+listener callback engine_data_handler
+Map to: 0
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.811997890472412, 133.29701232910156, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 50.941273818144936, 'y': 133.29756315689755}, 'angle': {'radian': 1.6007015280106422, 'degree': 91.71344181515173}, 'force': 2.833385204073341, 'type': 'move'}
+Sending turn engine data: "91.71344181515173"
+jestem w publish_velocity
+Sending move engine data: "[2.833385204073341, 133.29756315689755, False]"
+Received: 91.71343994140625
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.8333852291107178, 133.2975616455078, False)
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Received command: {'position': {'x': 50.95027252038442, 'y': 133.2978318383686}, 'angle': {'radian': 1.6005889941047702, 'degree': 91.70699409729313}, 'force': 2.8440843812167382, 'type': 'move'}
+Sending turn engine data: "91.70699409729313"
+jestem w publish_velocity
+Sending move engine data: "[2.8440843812167382, 133.2978318383686, False]"
+Received: 91.70699310302734
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.8440842628479004, 133.29783630371094, False)
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Received command: {'position': {'x': 50.969509127113255, 'y': 133.29840280195876}, 'angle': {'radian': 1.6003484306257363, 'degree': 91.6932108252395}, 'force': 2.867229305700173, 'type': 'move'}
+Sending turn engine data: "91.6932108252395"
+jestem w publish_velocity
+Sending move engine data: "[2.867229305700173, 133.29840280195876, False]"
+Received: 91.6932144165039
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.8672292232513428, 133.29840087890625, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 50.98558316544464, 'y': 133.29887634499042}, 'angle': {'radian': 1.600147417973712, 'degree': 91.68169364864978}, 'force': 2.8868599948574096, 'type': 'move'}
+Sending turn engine data: "91.68169364864978"
+jestem w publish_velocity
+Sending move engine data: "[2.8868599948574096, 133.29887634499042, False]"
+Received: 91.68169403076172
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.886859893798828, 133.2988739013672, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 50.99425232529046, 'y': 133.29913039706437}, 'angle': {'radian': 1.6000390069539177, 'degree': 91.67548215476286}, 'force': 2.8975593467233356, 'type': 'move'}
+Sending turn engine data: "91.67548215476286"
+jestem w publish_velocity
+Received: 91.67548370361328
+Sending move engine data: "[2.8975593467233356, 133.29913039706437, False]"
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.897559404373169, 133.29913330078125, False)
+ServoSubscrivber
+Moving forward with velocity: 100
+Received: 0
+Received command: {'position': {'x': 51.00285749616769, 'y': 133.29938164367806}, 'angle': {'radian': 1.5999313964796085, 'degree': 91.66931652875354}, 'force': 2.9082584464126824, 'type': 'move'}
+Sending turn engine data: "91.66931652875354"
+jestem w publish_velocity
+Sending move engine data: "[2.9082584464126824, 133.29938164367806, False]"
+Received: 91.66931915283203
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.9082584381103516, 133.29937744140625, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.01987145632235, 'y': 133.299875675388}, 'angle': {'radian': 1.5997186323391532, 'degree': 91.65712604147373}, 'force': 2.9296467363250294, 'type': 'move'}
+Sending turn engine data: "91.65712604147373"
+jestem w publish_velocity
+Sending move engine data: "[2.9296467363250294, 133.299875675388, False]"
+Received: 91.6571273803711
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+ServoSubscrivber
+Received: (2.9296467304229736, 133.2998809814453, False)
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.36170843015252, 'y': 133.30903398822701}, 'angle': {'radian': 1.5954441336583813, 'degree': 91.41221530753126}, 'force': 2.9400078600400517, 'type': 'move'}
+Sending turn engine data: "91.41221530753126"
+jestem w publish_velocity
+Sending move engine data: "[2.9400078600400517, 133.30903398822701, False]"
+Received: 91.41221618652344
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.9400079250335693, 133.3090362548828, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.326613707683336, 'y': 133.3081611002253}, 'angle': {'radian': 1.5958829533641028, 'degree': 91.43735782463627}, 'force': 2.9507469769119092, 'type': 'move'}
+Sending turn engine data: "91.43735782463627"
+jestem w publish_velocity
+Sending move engine data: "[2.9507469769119092, 133.3081611002253, False]"
+Received: 91.4373550415039
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.950747013092041, 133.30816650390625, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.333857436526344, 'y': 133.30834253082006}, 'angle': {'radian': 1.5957923783566437, 'degree': 91.4321682589795}, 'force': 2.9614369837377885, 'type': 'move'}
+Sending turn engine data: "91.4321682589795"
+jestem w publish_velocity
+Sending move engine data: "[2.9614369837377885, 133.30834253082006, False]"
+Received: 91.43216705322266
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.9614369869232178, 133.308349609375, False)
+ServoSubscrivber
+Received: 0
+Moving forward with velocity: 100
+Received command: {'position': {'x': 51.333857436526344, 'y': 133.30834253082006}, 'angle': {'radian': 1.5957923783566437, 'degree': 91.4321682589795}, 'force': 2.9614369837377885, 'type': 'move'}
+Sending turn engine data: "91.4321682589795"
+jestem w publish_velocity
+Sending move engine data: "[2.9614369837377885, 133.30834253082006, False]"
+Received: 91.43216705322266
+Map to: 0
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.9614369869232178, 133.308349609375, False)
+ServoSubscrivber
+Moving forward with velocity: 100
+Received: 0
+Received command: {'position': {'x': 51.333857436526344, 'y': 133.30834253082006}, 'angle': {'radian': 1.5957923783566437, 'degree': 91.4321682589795}, 'force': 2.9614369837377885, 'type': 'hold'}
+Received command: {'position': {'x': 51.333857436526344, 'y': 133.30834253082006}, 'angle': {'radian': 1.5957923783566437, 'degree': 91.4321682589795}, 'force': 2.9614369837377885, 'type': 'hold'}
+Received command: {'position': {'x': 51.333857436526344, 'y': 133.30834253082006}, 'angle': {'radian': 1.5957923783566437, 'degree': 91.4321682589795}, 'force': 2.9614369837377885, 'type': 'hold'}
+Received command: {'position': {'x': 51.333857436526344, 'y': 133.30834253082006}, 'angle': {'radian': 1.5957923783566437, 'degree': 91.4321682589795}, 'force': 2.9614369837377885, 'type': 'hold'}
+Received command: {'position': {'x': 51.333857436526344, 'y': 133.30834253082006}, 'angle': {'radian': 1.5957923783566437, 'degree': 91.4321682589795}, 'force': 2.9614369837377885, 'type': 'hold'}
+Received command: {'position': {'x': 51.341056167396246, 'y': 133.3085221839643}, 'angle': {'radian': 1.59570236620345, 'degree': 91.42701094249661}, 'force': 2.9721375971858643, 'type': 'move'}
+Sending turn engine data: "91.42701094249661"
+jestem w publish_velocity
+Received: 91.42700958251953
+Map to: 0
+Sending move engine data: "[2.9721375971858643, 133.3085221839643, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.972137689590454, 133.3085174560547, False)
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Sending camera frame: "[255 216 255 ...  63 255 217]"
+Received command: {'position': {'x': 50.44587345382935, 'y': 133.28120744793537}, 'angle': {'radian': 1.6068974164679375, 'degree': 92.06844007408857}, 'force': 2.9838639723657447, 'type': 'move'}
+Sending turn engine data: "92.06844007408857"
+jestem w publish_velocity
+Sending move engine data: "[2.9838639723657447, 133.28120744793537, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.9838640689849854, 133.2812042236328, False)
+Received: 92.06844329833984
+Map to: 0
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 0
+Received command: {'position': {'x': 49.92652214638291, 'y': 133.26076065047192}, 'angle': {'radian': 1.6133943484639437, 'degree': 92.44068685724322}, 'force': 2.995330364354881, 'type': 'move'}
+Sending turn engine data: "92.44068685724322"
+jestem w publish_velocity
+Received: 92.44068908691406
+Map to: 1
+Sending move engine data: "[2.995330364354881, 133.26076065047192, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (2.995330333709717, 133.26075744628906, False)
+Moving forward with velocity: 100
+ServoSubscrivber
+Received: 1
+Received command: {'position': {'x': 49.61991172149244, 'y': 133.24710248441713}, 'angle': {'radian': 1.6172307818190705, 'degree': 92.6604982968752}, 'force': 3.0065575089839673, 'type': 'move'}
+Sending turn engine data: "92.6604982968752"
+jestem w publish_velocity
+Received: 92.6604995727539
+Map to: 1
+listener callback engine_data_handler
+Sending move engine data: "[3.0065575089839673, 133.24710248441713, False]"
+eeeeee in if
+get topic controller_enginee_data
+Received: (3.0065574645996094, 133.24710083007812, False)
+ServoSubscrivber
+Received: 1
+Moving forward with velocity: 100
+Received command: {'position': {'x': 48.83406410644291, 'y': 133.20671172954215}, 'angle': {'radian': 1.6270668830484663, 'degree': 93.22406538418302}, 'force': 3.02950910470917, 'type': 'move'}
+Sending turn engine data: "93.22406538418302"
+Received: 93.22406768798828
+jestem w publish_velocity
+Map to: 1
+Sending move engine data: "[3.02950910470917, 133.20671172954215, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (3.0295090675354004, 133.2067108154297, False)
+ServoSubscrivber
+Received: 1
+Moving forward with velocity: 100
+Received command: {'position': {'x': 48.026679985848745, 'y': 133.15713573743855}, 'angle': {'radian': 1.637178235517692, 'degree': 93.80340320583885}, 'force': 3.0528348839627837, 'type': 'move'}
+Sending turn engine data: "93.80340320583885"
+jestem w publish_velocity
+Received: 93.80340576171875
+Map to: 1
+Sending move engine data: "[3.0528348839627837, 133.15713573743855, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (3.052834987640381, 133.15713500976562, False)
+ServoSubscrivber
+Received: 1
+Moving forward with velocity: 100
+Received command: {'position': {'x': 46.655775634003874, 'y': 133.05416011763185}, 'angle': {'radian': 1.6543630272719652, 'degree': 94.7880192451699}, 'force': 3.0675196686590596, 'type': 'move'}
+Sending turn engine data: "94.7880192451699"
+jestem w publish_velocity
+Received: 94.78801727294922
+Map to: 2
+Sending move engine data: "[3.0675196686590596, 133.05416011763185, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (3.0675196647644043, 133.0541534423828, False)
+ServoSubscrivber
+Received: 2
+Moving forward with velocity: 100
+Received command: {'position': {'x': 45.27662476221337, 'y': 132.92660847011888}, 'angle': {'radian': 1.6716762017544167, 'degree': 95.77999107298798}, 'force': 3.0961819847705656, 'type': 'move'}
+Sending turn engine data: "95.77999107298798"
+jestem w publish_velocity
+Received: 95.77999114990234
+Map to: 2
+Sending move engine data: "[3.0961819847705656, 132.92660847011888, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (3.096181869506836, 132.92660522460938, False)
+ServoSubscrivber
+Received: 2
+Moving forward with velocity: 100
+Received command: {'position': {'x': 42.90274790094851, 'y': 132.65043670667725}, 'angle': {'radian': 1.7015509062791079, 'degree': 97.49168555645316}, 'force': 3.1262960881566295, 'type': 'move'}
+Sending turn engine data: "97.49168555645316"
+jestem w publish_velocity
+Received: 97.49168395996094
+Map to: 3
+Sending move engine data: "[3.1262960881566295, 132.65043670667725, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (3.126296043395996, 132.6504364013672, False)
+ServoSubscrivber
+Received: 3
+Moving forward with velocity: 100
+Received command: {'position': {'x': 40.58454157569376, 'y': 132.3109776937493}, 'angle': {'radian': 1.7308385566836204, 'degree': 99.16974431648636}, 'force': 3.161407717142983, 'type': 'move'}
+Sending turn engine data: "99.16974431648636"
+jestem w publish_velocity
+Sending move engine data: "[3.161407717142983, 132.3109776937493, False]"
+Received: 99.16974639892578
+Map to: 4
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (3.161407709121704, 132.31097412109375, False)
+ServoSubscrivber
+Received: 4
+Moving forward with velocity: 100
+Error receiving command: 'utf-8' codec can't decode byte 0xd4 in position 2: invalid continuation byte
+Received command: {'force': 0, 'position': {'x': 0, 'y': 0}, 'angle': {'radian': 0, 'degree': 0}, 'type': 'stop'}
+jestem w publish_velocity
+Sending move engine data: "[0, 0, False]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (0.0, 0.0, False)
+Moving backward with velocity: 0
+sending due an excpetion timed out
+jestem w publish_velocity
+Sending move engine data: "[0, 0, True]"
+listener callback engine_data_handler
+eeeeee in if
+get topic controller_enginee_data
+Received: (0.0, 0.0, True)
+Sending camera frame: "[255 

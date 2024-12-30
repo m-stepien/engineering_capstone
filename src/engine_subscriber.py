@@ -4,35 +4,57 @@ import struct
 
 class EngineSubscriber():
     
-    def __init__(self, broker_address='localhost', topic='enginee_velocity'):
+    def __init__(self, broker_address='localhost', topic='enginee_velocity', publish_topic="current_velocity_data"):
         self.client = mqtt.Client("EngineSubscriber")
 
         try:
             self.client.connect(broker_address)
         except Exception as e:
             print(f"Problem with connection to broker: {e}")
-
         self.topic = topic
         self.client.subscribe(self.topic)
+        self.publish_topic = publish_topic
         self.client.on_message = self.listener_callback
         self.motor = Motor()
-        print("Init successful")
+        print("Init successful engine subscriber")
 
     
     def listener_callback(self, client, userdata, msg):
         try:
-            unpacked_data = struct.unpack('i?', msg.payload)
+            unpacked_data = struct.unpack('i??', msg.payload)
         except Exception as e:
             print(f"Issue with unpacking struct: {e}")
             return 0
-
         v = unpacked_data[0]
-        d = unpacked_data[1]
-        if d:
-            self.motor.move_forward(v)
+        if v == 0:
+            if self.motor.get_current_direction()==1 or self.motor.get_current_direction()==0:
+                d=True
+            else:
+                d=False
         else:
-            self.motor.move_backward(v)    
-        print(f'Received: {v}')
+            d = unpacked_data[1]        
+        is_break_command = unpacked_data[2]
+        if is_break_command:
+            self.motor.stop()
+        else:
+            if d:
+                self.motor.move_forward(v)
+                print(f'Moving forward with velocity: {v}')
+            else:
+                self.motor.move_backward(v)    
+                print(f'Moving backward with velocity: {v}')
+        self.publish_current_velocity()
+
+
+    def publish_current_velocity(self):
+        try:
+            print(f"HERE engine_subscriber publish_current_velocity {self.motor.get_current_speed()}")
+            current_velocity = self.motor.get_current_speed()
+            msg = struct.pack('i', int(current_velocity))
+            self.client.publish(self.publish_topic, msg)
+        except Exception as e:
+            print(f"TEST ISSUE Issue with sending speed: {e}")
+
 
     
     def start(self):
