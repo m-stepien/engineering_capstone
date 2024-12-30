@@ -16,6 +16,7 @@ class EngineDataHandler():
         self.client.subscribe(self.topic)
         self.client.on_message = self.listener_callback
         self.max_velocity_topic = max_velocity_topic
+        
         print("Init successful engine_data_handler")
 
     def start(self):
