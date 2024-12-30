@@ -44,7 +44,7 @@ class Motor():
                 self.current_speed = 0
                 self.immediate_change = False
             else:
-                if self.current_speed <= 50 and self.current_speed < self.target_speed and self.current_direction != 0:
+                if self.current_speed <= 40 and self.current_speed < self.target_speed and self.current_direction != 0:
                     self.motor_speed.ChangeDutyCycle(100)
                     time.sleep(0.01)
                     self.current_speed=40
